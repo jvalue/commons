@@ -1,0 +1,22 @@
+# generated content
+*.class
+*.war
+*.ear
+*.iml
+*.ipr
+*.iws
+target
+bin
+build
+logging.log
+
+# IDE specific
+.classpath
+.project
+.idea
+.settings
+*.swp
+
+# gradle
+.gradle
+gradle.properties
