@@ -1,1 +1,1 @@
-include ':common'
+include ':utils', ':couchdb', ':auth', ':rest', ':models'
