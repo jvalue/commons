@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jvalue.commons.auth.BasicCredentials;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 
@@ -13,17 +14,20 @@ public final class CouchDbConfig {
 
 	@NotNull private final String url;
 	@NotNull private final String dbPrefix;
-	@NotNull @Valid BasicCredentials admin;
+	@NotNull @Valid private final BasicCredentials admin;
+	@Min(1) private final int maxConnections;
 
 	@JsonCreator
 	public CouchDbConfig(
 			@JsonProperty("url") String url,
 			@JsonProperty("dbPrefix") String dbPrefix,
-			@JsonProperty("admin") BasicCredentials admin) {
+			@JsonProperty("admin") BasicCredentials admin,
+			@JsonProperty("maxConnections") int maxConnections) {
 
 		this.url = url;
 		this.dbPrefix = dbPrefix;
 		this.admin = admin;
+		this.maxConnections = maxConnections;
 	}
 
 
@@ -39,6 +43,11 @@ public final class CouchDbConfig {
 
 	public BasicCredentials getAdmin() {
 		return admin;
+	}
+
+
+	public int getMaxConnections() {
+		return maxConnections;
 	}
 
 }
