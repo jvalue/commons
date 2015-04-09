@@ -1,1 +1,2 @@
-include ':utils', ':couchdb', ':auth', ':rest', ':models'
+include ':utils', ':couchdb', ':couchdb-test', ':auth', ':rest', ':models'
+
