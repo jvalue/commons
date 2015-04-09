@@ -56,7 +56,7 @@ public final class RestrictedToProvider extends AbstractValueFactoryProvider {
 
 				// check authorization
 				Role requiredRole = parameter.getAnnotation(RestrictedTo.class).value();
-				if (!user.get().getRole().equals(requiredRole)) onUnauthorized();
+				if (!user.get().getRole().isMatchingRole(requiredRole)) onUnauthorized();
 
 				return user.get();
 			}
