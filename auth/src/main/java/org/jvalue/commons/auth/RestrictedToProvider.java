@@ -44,25 +44,29 @@ public final class RestrictedToProvider extends AbstractValueFactoryProvider {
 		return new AbstractContainerRequestValueFactory<User>() {
 			@Override
 			public User provide() {
+				RestrictedTo restrictedToAnnotation = parameter.getAnnotation(RestrictedTo.class);
+				Role requiredRole = restrictedToAnnotation.value();
+				boolean isAuthOptional = restrictedToAnnotation.isOptional();
+
 				// find auth header
 				List<String> headers = getContainerRequest().getRequestHeader(HttpHeaders.AUTHORIZATION);
-				if (headers == null || headers.isEmpty()) onUnauthorized();
+				if (headers == null || headers.isEmpty()) return onUnauthorized(isAuthOptional);
 				String authHeader = headers.get(0);
 
 				// check authentication
 				Optional<User> user = Optional.absent();
 				if (authHeader.startsWith("Basic ")) user = basicAuthenticator.authenticate(authHeader);
-				if (!user.isPresent()) onUnauthorized();
+				if (!user.isPresent()) return onUnauthorized(isAuthOptional);
 
 				// check authorization
-				Role requiredRole = parameter.getAnnotation(RestrictedTo.class).value();
-				if (!user.get().getRole().isMatchingRole(requiredRole)) onUnauthorized();
+				if (!user.get().getRole().isMatchingRole(requiredRole)) return onUnauthorized(isAuthOptional);
 
 				return user.get();
 			}
 
-			private void onUnauthorized() {
-				throw new UnauthorizedException();
+			private User onUnauthorized(boolean isAuthOptional) {
+				if (isAuthOptional) return null;
+				else throw new UnauthorizedException();
 			}
 		};
 	}

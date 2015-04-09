@@ -50,7 +50,7 @@ public final class RestrictedToProviderTest {
 
 	@Test
 	public void testValidAuth() {
-		Factory<User> factory = setupMocks(adminHeader, adminUser);
+		Factory<User> factory = setupMocks(adminHeader, adminUser, false);
 		User user = factory.provide();
 		Assert.assertEquals(adminUser, user);
 	}
@@ -58,26 +58,32 @@ public final class RestrictedToProviderTest {
 
 	@Test(expected = UnauthorizedException.class)
 	public void testMissingHeader() {
-		Factory<User> factory = setupMocks(null, adminUser);
+		Factory<User> factory = setupMocks(null, adminUser, false);
 		factory.provide();
 	}
 
 
 	@Test(expected = UnauthorizedException.class)
 	public void testInvalidCredentials() {
-		Factory<User> factory = setupMocks("Basic Zm9vOmJhcg==", null);
+		Factory<User> factory = setupMocks("Basic Zm9vOmJhcg==", null, false);
 		factory.provide();
 	}
 
 
 	@Test(expected = UnauthorizedException.class)
 	public void testInvalidRole() {
-		Factory<User> factory = setupMocks(adminHeader, publicUser);
+		Factory<User> factory = setupMocks(adminHeader, publicUser, false);
 		factory.provide();
 	}
 
 
-	private Factory<User> setupMocks(final String authHeader, final User user) {
+	public void testOptional() {
+		Factory<User> factory = setupMocks(adminHeader, publicUser, true);
+		Assert.assertNull(factory.provide());
+	}
+
+
+	private Factory<User> setupMocks(final String authHeader, final User user, final boolean isAuthOptional) {
 		new Expectations() {{
 			basicAuthenticator.authenticate(authHeader);
 			result = Optional.fromNullable(user);
@@ -91,6 +97,11 @@ public final class RestrictedToProviderTest {
 				@Override
 				public Role value() {
 					return Role.ADMIN;
+				}
+
+				@Override
+				public boolean isOptional() {
+					return isAuthOptional;
 				}
 			};
 			minTimes = 0;
