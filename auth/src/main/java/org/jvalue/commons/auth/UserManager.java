@@ -1,6 +1,8 @@
 package org.jvalue.commons.auth;
 
 
+import org.ektorp.DocumentNotFoundException;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,6 +57,17 @@ public final class UserManager {
 		byte[] encryptedPassword = authenticationUtils.getEncryptedPassword(password, salt);
 		BasicCredentials credentials = new BasicCredentials(user.getId(), encryptedPassword, salt);
 		credentialsRepository.add(credentials);
+	}
+
+
+	public void remove(User user) {
+		userRepository.remove(user);
+		try {
+			BasicCredentials credentials = credentialsRepository.findById(user.getId());
+			credentialsRepository.remove(credentials);
+		} catch (DocumentNotFoundException dnfe) {
+			// user wasn't using basic auth
+		}
 	}
 
 }

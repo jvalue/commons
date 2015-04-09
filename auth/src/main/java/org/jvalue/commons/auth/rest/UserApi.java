@@ -1,0 +1,72 @@
+package org.jvalue.commons.auth.rest;
+
+
+import org.jvalue.commons.auth.RestrictedTo;
+import org.jvalue.commons.auth.Role;
+import org.jvalue.commons.auth.UnauthorizedException;
+import org.jvalue.commons.auth.User;
+import org.jvalue.commons.auth.UserDescription;
+import org.jvalue.commons.auth.UserManager;
+
+import java.util.List;
+import java.util.UUID;
+
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/users")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class UserApi {
+
+	private final UserManager userManager;
+
+	@Inject
+	public UserApi(UserManager userManager) {
+		this.userManager = userManager;
+	}
+
+
+	@GET
+	public List<User> getAllUsers(@RestrictedTo(Role.ADMIN) User user) {
+		return userManager.getAll();
+	}
+
+
+	@POST
+	public User addUser(@RestrictedTo(value = Role.ADMIN, isOptional = true) User user, UserDescription userDescription) {
+		// check for valid role (only admins can add admins)
+		if (userDescription.getRole().equals(Role.ADMIN) && user == null) throw new UnauthorizedException("missing admin privileges");
+
+		// store new user
+		String userId = UUID.randomUUID().toString();
+		User newUser = new User(userId, userDescription.getName(), userDescription.getEmail(), userDescription.getRole());
+		userManager.add(user, userDescription.getPassword());
+
+		return newUser;
+	}
+
+
+	@GET
+	@Path("/{userId}")
+	public User getUser(@RestrictedTo(Role.PUBLIC) User user, @PathParam("userId") String userId) {
+		if (!userId.equals(user.getId()) && !user.getRole().equals(Role.ADMIN)) throw new UnauthorizedException();
+		return userManager.findById(userId);
+	}
+
+
+	@DELETE
+	@Path("/{userId}")
+	public void removeUser(@RestrictedTo(Role.PUBLIC) User user, @PathParam("userId") String userId) {
+		if (!userId.equals(user.getId()) && !user.getRole().equals(Role.ADMIN)) throw new UnauthorizedException();
+		userManager.remove(user);
+	}
+
+}
