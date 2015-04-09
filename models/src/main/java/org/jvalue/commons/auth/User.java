@@ -8,7 +8,7 @@ import com.google.common.base.Objects;
 import javax.validation.constraints.NotNull;
 
 /**
- * One authenticated user.
+ * A registered user.
  */
 public final class User {
 

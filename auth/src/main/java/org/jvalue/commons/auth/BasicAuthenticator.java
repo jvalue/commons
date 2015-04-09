@@ -15,17 +15,17 @@ import javax.inject.Inject;
  */
 public final class BasicAuthenticator implements Authenticator {
 
-	private final UserRepository userRepository;
+	private final UserManager userManager;
 	private final BasicCredentialsRepository credentialsRepository;
 	private final BasicAuthenticationUtils authenticationUtils;
 
 	@Inject
 	BasicAuthenticator(
-			UserRepository userRepository,
+			UserManager userManager,
 			BasicCredentialsRepository credentialsRepository,
 			BasicAuthenticationUtils authenticationUtils) {
 
-		this.userRepository = userRepository;
+		this.userManager = userManager;
 		this.credentialsRepository = credentialsRepository;
 		this.authenticationUtils  = authenticationUtils;
 	}
@@ -44,7 +44,7 @@ public final class BasicAuthenticator implements Authenticator {
 		String password = token.substring(colon + 1);
 
 		try {
-			User user = userRepository.findByEmail(email);
+			User user = userManager.findByEmail(email);
 			BasicCredentials credentials = credentialsRepository.findById(user.getId());
 			if (authenticationUtils.checkPassword(password, credentials)) {
 				return Optional.of(user);
