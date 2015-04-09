@@ -1,6 +1,8 @@
 dependencies {
-    compile project(':auth')
-    compile project(':couchdb')
+    compile 'org.glassfish.jersey.core:jersey-server:2.17'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.5.1'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.1'
+    compile project(':models')
 
     testCompile 'junit:junit:4.11'
     testCompile 'org.jmockit:jmockit:1.13'

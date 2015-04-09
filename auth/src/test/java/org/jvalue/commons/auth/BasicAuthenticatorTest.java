@@ -22,14 +22,14 @@ public class BasicAuthenticatorTest {
 
 	private BasicAuthenticator authenticator;
 
-	@Mocked private UserRepository userRepository;
+	@Mocked private UserManager userManager;
 	@Mocked private BasicCredentialsRepository credentialsRepository;
 	@Mocked private BasicAuthenticationUtils authenticationUtils;
 
 
 	@Before
 	public void setup() {
-		authenticator = new BasicAuthenticator(userRepository, credentialsRepository, authenticationUtils);
+		authenticator = new BasicAuthenticator(userManager, credentialsRepository, authenticationUtils);
 	}
 
 
@@ -68,7 +68,7 @@ public class BasicAuthenticatorTest {
 
 	private void setupMocks(final Object userResult, final Object credentialsResult, final boolean isMatch) {
 		new Expectations() {{
-			userRepository.findByEmail(user.getEmail()); result = userResult; minTimes = 0;
+			userManager.findByEmail(user.getEmail()); result = userResult; minTimes = 0;
 			credentialsRepository.findById(user.getId()); result = credentialsResult; minTimes = 0;
 			authenticationUtils.checkPassword("adminPass", credentials); result = isMatch; minTimes = 0;
 		}};

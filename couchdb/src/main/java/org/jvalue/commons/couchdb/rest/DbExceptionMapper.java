@@ -1,7 +1,8 @@
-package org.jvalue.commons.rest;
+package org.jvalue.commons.couchdb.rest;
 
 
 import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.rest.RestUtils;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
