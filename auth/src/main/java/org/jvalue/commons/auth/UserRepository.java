@@ -31,6 +31,11 @@ public final class UserRepository extends RepositoryAdapter<
 	}
 
 
+	public User findByEmail(String email) {
+		return repository.findByEmail(email).getValue();
+	}
+
+
 	@View( name = "all", map = "function(doc) { if (" + DOCUMENT_ID + ") emit(null, doc)}")
 	static final class UserCouchDbRepository
 			extends CouchDbRepositorySupport<UserDocument>
@@ -50,6 +55,16 @@ public final class UserRepository extends RepositoryAdapter<
 			if (users.isEmpty()) throw new DocumentNotFoundException(userId);
 			if (users.size() > 1)
 				throw new IllegalStateException("found more than one user for id " + userId);
+			return users.get(0);
+		}
+
+
+		@View(name = "by_email", map = "function(doc) { if (" + DOCUMENT_ID + ") emit(doc.value.email, doc._id)}")
+		public UserDocument findByEmail(String userEmail) {
+			List<UserDocument> users = queryView("by_email", userEmail);
+			if (users.isEmpty()) throw new DocumentNotFoundException(userEmail);
+			if (users.size() > 1)
+				throw new IllegalStateException("found more than one user for email " + userEmail);
 			return users.get(0);
 		}
 

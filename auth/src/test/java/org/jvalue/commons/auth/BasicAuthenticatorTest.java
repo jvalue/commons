@@ -3,46 +3,75 @@ package org.jvalue.commons.auth;
 
 import com.google.common.base.Optional;
 
+import org.ektorp.DocumentNotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.integration.junit4.JMockit;
 
+@RunWith(JMockit.class)
 public class BasicAuthenticatorTest {
 
-	private final User publicUser = new User("someId", "someName", "someMail", Role.PUBLIC);
-	private final BasicCredentials publicCredentials = new BasicCredentials("user", "pass");
+	private final String validAuthHeader = "Basic YWRtaW5NYWlsOmFkbWluUGFzcw==";
+	private final User user = new User("adminId", "adminName", "adminMail", Role.PUBLIC);
+	private final BasicCredentials credentials = new BasicCredentials("adminId", "admin".getBytes(), "salt".getBytes());
 
 	private BasicAuthenticator authenticator;
 
+	@Mocked private UserRepository userRepository;
+	@Mocked private BasicCredentialsRepository credentialsRepository;
+	@Mocked private BasicAuthenticationUtils authenticationUtils;
+
+
 	@Before
 	public void setup() {
-		Map<BasicCredentials, User> userMap = new HashMap<>();
-		userMap.put(publicCredentials, publicUser);
-		authenticator = new BasicAuthenticator(userMap);
+		authenticator = new BasicAuthenticator(userRepository, credentialsRepository, authenticationUtils);
 	}
+
 
 	@Test
 	public void testValidUser() {
-		Optional<User> user = authenticator.authenticate(publicCredentials, Role.PUBLIC);
-		Assert.assertEquals(publicUser, user.get());
+		setupMocks(user, credentials, true);
+		Optional<User> optionalUser = authenticator.authenticate(validAuthHeader);
+		Assert.assertEquals(user, optionalUser.get());
+	}
+
+
+	@Test
+	public void testMissingUser() {
+		testFailure(new DocumentNotFoundException(user.getId()), credentials, true);
+	}
+
+
+	@Test
+	public void testMissingCredentials() {
+		testFailure(user, new DocumentNotFoundException(credentials.getUserId()), true);
 	}
 
 
 	@Test
 	public void testInvalidCredentials() {
-		BasicCredentials credentials = new BasicCredentials("foo", "bar");
-		Optional<User> user = authenticator.authenticate(credentials, Role.PUBLIC);
-		Assert.assertFalse(user.isPresent());
+		testFailure(user, credentials, false);
 	}
 
 
-	@Test
-	public void testInvalidRole() {
-		Optional<User> user = authenticator.authenticate(publicCredentials, Role.ADMIN);
-		Assert.assertFalse(user.isPresent());
+	private void testFailure(final Object user, final Object credentials, final boolean isMatch) {
+		setupMocks(user, credentials, isMatch);
+		Optional<User> optionalUser = authenticator.authenticate(validAuthHeader);
+		Assert.assertFalse(optionalUser.isPresent());
+	}
+
+
+	private void setupMocks(final Object userResult, final Object credentialsResult, final boolean isMatch) {
+		new Expectations() {{
+			userRepository.findByEmail(user.getEmail()); result = userResult; minTimes = 0;
+			credentialsRepository.findById(user.getId()); result = credentialsResult; minTimes = 0;
+			authenticationUtils.checkPassword("adminPass", credentials); result = isMatch; minTimes = 0;
+		}};
 	}
 
 }

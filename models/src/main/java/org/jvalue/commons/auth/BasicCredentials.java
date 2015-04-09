@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
+import java.util.Arrays;
+
 import javax.validation.constraints.NotNull;
 
 
@@ -13,27 +15,34 @@ import javax.validation.constraints.NotNull;
  */
 public final class BasicCredentials {
 
-	@NotNull private final String username;
-	@NotNull private final String password;
-
+	@NotNull private final String userId;
+	@NotNull private final byte[] encryptedPassword;
+	@NotNull private final byte[] salt;
 
 	@JsonCreator
 	public BasicCredentials(
-			@JsonProperty("username") String username,
-			@JsonProperty("password") String password) {
+			@JsonProperty("userId") String userId,
+			@JsonProperty("encryptedPassword") byte[] encryptedPassword,
+			@JsonProperty("salt") byte[] salt) {
 
-		this.username = username;
-		this.password = password;
+		this.userId = userId;
+		this.encryptedPassword = encryptedPassword;
+		this.salt = salt;
 	}
 
 
-	public String getUsername() {
-		return username;
+	public String getUserId() {
+		return userId;
 	}
 
 
-	public String getPassword() {
-		return password;
+	public byte[] getEncryptedPassword() {
+		return encryptedPassword;
+	}
+
+
+	public byte[] getSalt() {
+		return salt;
 	}
 
 
@@ -41,14 +50,15 @@ public final class BasicCredentials {
 	public boolean equals(Object other) {
 		if (other == null || !(other instanceof BasicCredentials)) return false;
 		BasicCredentials credentials = (BasicCredentials) other;
-		return Objects.equal(username, credentials.username)
-				&& Objects.equal(password, credentials.password);
+		return Objects.equal(userId, credentials.userId)
+				&& Arrays.equals(encryptedPassword, credentials.encryptedPassword)
+				&& Arrays.equals(salt, credentials.salt);
 	}
 
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(username, password);
+		return Objects.hashCode(userId, Arrays.hashCode(encryptedPassword), Arrays.hashCode(salt));
 	}
 
 }

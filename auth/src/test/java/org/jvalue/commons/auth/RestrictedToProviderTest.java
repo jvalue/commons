@@ -33,12 +33,12 @@ public final class RestrictedToProviderTest {
 	@Mocked private Provider<ContainerRequest> requestProvider;
 	@Mocked private ContainerRequest containerRequest;
 
-	@Mocked BasicAuthenticator basicAuthenticator;
+	@Mocked private BasicAuthenticator basicAuthenticator;
 
 	private RestrictedToProvider provider;
 
 	private final User adminUser = new User("someId", "admin", "someMail", Role.ADMIN);
-	private final BasicCredentials adminCredentials = new BasicCredentials("admin", "admin");
+	private final User publicUser = new User("someId", "admin", "someMail", Role.PUBLIC);
 	private final String adminHeader = "Basic YWRtaW46YWRtaW4="; // admin:admin
 
 
@@ -50,7 +50,7 @@ public final class RestrictedToProviderTest {
 
 	@Test
 	public void testValidAuth() {
-		Factory<User> factory = setupMocks(adminHeader, adminUser, Role.ADMIN);
+		Factory<User> factory = setupMocks(adminHeader, adminUser);
 		User user = factory.provide();
 		Assert.assertEquals(adminUser, user);
 	}
@@ -58,33 +58,29 @@ public final class RestrictedToProviderTest {
 
 	@Test(expected = UnauthorizedException.class)
 	public void testMissingHeader() {
-		Factory<User> factory = setupMocks(null, adminUser, Role.ADMIN);
+		Factory<User> factory = setupMocks(null, adminUser);
 		factory.provide();
 	}
 
 
 	@Test(expected = UnauthorizedException.class)
 	public void testInvalidCredentials() {
-		Factory<User> factory = setupMocks("Basic Zm9vOmJhcg==", adminUser, Role.ADMIN);
+		Factory<User> factory = setupMocks("Basic Zm9vOmJhcg==", null);
 		factory.provide();
 	}
 
 
 	@Test(expected = UnauthorizedException.class)
 	public void testInvalidRole() {
-		Factory<User> factory = setupMocks(adminHeader, adminUser, Role.PUBLIC);
+		Factory<User> factory = setupMocks(adminHeader, publicUser);
 		factory.provide();
 	}
 
 
-	private Factory<User> setupMocks(
-			final String authHeader,
-			final User user,
-			final Role userRole) {
-
+	private Factory<User> setupMocks(final String authHeader, final User user) {
 		new Expectations() {{
-			basicAuthenticator.authenticate(adminCredentials, userRole);
-			result = Optional.of(user);
+			basicAuthenticator.authenticate(authHeader);
+			result = Optional.fromNullable(user);
 			minTimes = 0;
 
 			parameter.getRawType(); result = User.class;

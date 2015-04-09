@@ -2,7 +2,6 @@ package org.jvalue.commons.auth;
 
 
 import com.google.common.base.Optional;
-import com.google.common.io.BaseEncoding;
 
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.api.ServiceLocator;
@@ -11,7 +10,6 @@ import org.glassfish.jersey.server.internal.inject.AbstractValueFactoryProvider;
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider;
 import org.glassfish.jersey.server.model.Parameter;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,28 +47,17 @@ public final class RestrictedToProvider extends AbstractValueFactoryProvider {
 				// find auth header
 				List<String> headers = getContainerRequest().getRequestHeader(HttpHeaders.AUTHORIZATION);
 				if (headers == null || headers.isEmpty()) onUnauthorized();
-				String authValue = headers.get(0);
+				String authHeader = headers.get(0);
 
-				// check if auth header starts with "Basic "
-				int space = authValue.indexOf(' ');
-				if (space < 0) onUnauthorized();
-				String authType = authValue.substring(0, space);
-				if (!"basic".equalsIgnoreCase(authType)) onUnauthorized();
-
-				// decode credentials
-				String token = new String(BaseEncoding.base64().decode(
-						authValue.substring(space + 1)),
-						StandardCharsets.UTF_8);
-
-				int colon = token.indexOf(':');
-				if (colon < 0) onUnauthorized();
-				String username = token.substring(0, colon);
-				String password = token.substring(colon + 1);
-				BasicCredentials credentials = new BasicCredentials(username, password);
-
-				// authenticate
-				Optional<User> user = basicAuthenticator.authenticate(credentials, parameter.getAnnotation(RestrictedTo.class).value());
+				// check authentication
+				Optional<User> user = Optional.absent();
+				if (authHeader.startsWith("Basic ")) user = basicAuthenticator.authenticate(authHeader);
 				if (!user.isPresent()) onUnauthorized();
+
+				// check authorization
+				Role requiredRole = parameter.getAnnotation(RestrictedTo.class).value();
+				if (!user.get().getRole().equals(requiredRole)) onUnauthorized();
+
 				return user.get();
 			}
 
@@ -79,4 +66,5 @@ public final class RestrictedToProvider extends AbstractValueFactoryProvider {
 			}
 		};
 	}
+
 }

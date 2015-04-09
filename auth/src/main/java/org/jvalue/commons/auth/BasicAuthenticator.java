@@ -2,27 +2,59 @@ package org.jvalue.commons.auth;
 
 
 import com.google.common.base.Optional;
+import com.google.common.io.BaseEncoding;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.ektorp.DocumentNotFoundException;
+
+import java.nio.charset.StandardCharsets;
+
+import javax.inject.Inject;
 
 /**
- * Returns {@link User} objects based on {@link BasicCredentials}.
+ * Handles basic (username + password) authentication.
  */
-public final class BasicAuthenticator implements Authenticator<BasicCredentials> {
+public final class BasicAuthenticator implements Authenticator {
 
-	private final Map<BasicCredentials, User> userMap = new HashMap<>();
+	private final UserRepository userRepository;
+	private final BasicCredentialsRepository credentialsRepository;
+	private final BasicAuthenticationUtils authenticationUtils;
 
-	public BasicAuthenticator(Map<BasicCredentials, User> userMap) {
-		this.userMap.putAll(userMap);
+	@Inject
+	BasicAuthenticator(
+			UserRepository userRepository,
+			BasicCredentialsRepository credentialsRepository,
+			BasicAuthenticationUtils authenticationUtils) {
+
+		this.userRepository = userRepository;
+		this.credentialsRepository = credentialsRepository;
+		this.authenticationUtils  = authenticationUtils;
 	}
 
 
 	@Override
-	public Optional<User> authenticate(BasicCredentials credentials, Role requiredRole) {
-		User user = userMap.get(credentials);
-		if (user == null || !user.getRole().equals(requiredRole)) return Optional.absent();
-		return Optional.of(user);
+	public Optional<User> authenticate(String authHeader) {
+		// decode credentials
+		String token = new String(BaseEncoding.base64().decode(
+				authHeader.replaceFirst("Basic ", "")),
+				StandardCharsets.UTF_8);
+
+		int colon = token.indexOf(':');
+		if (colon < 0) return Optional.absent();
+		String email = token.substring(0, colon);
+		String password = token.substring(colon + 1);
+
+		try {
+			User user = userRepository.findByEmail(email);
+			BasicCredentials credentials = credentialsRepository.findById(user.getId());
+			if (authenticationUtils.checkPassword(password, credentials)) {
+				return Optional.of(user);
+			} else {
+				return Optional.absent();
+			}
+
+		} catch (DocumentNotFoundException dnfe) {
+			return Optional.absent();
+		}
 	}
 
 }

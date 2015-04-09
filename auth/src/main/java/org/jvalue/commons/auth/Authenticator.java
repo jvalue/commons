@@ -5,14 +5,12 @@ import com.google.common.base.Optional;
 
 /**
  * Tries to match {@link User} objects to credentials.
- *
- * @param <T> the credentials
  */
-public interface Authenticator<T> {
+public interface Authenticator {
 
 	/**
 	 * @return the authenticated user if any.
 	 */
-	public Optional<User> authenticate(T credentials, Role requiredRole);
+	public Optional<User> authenticate(String authHeader);
 
 }
