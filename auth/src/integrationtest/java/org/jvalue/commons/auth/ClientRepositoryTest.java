@@ -13,7 +13,7 @@ public final class ClientRepositoryTest extends AbstractRepositoryAdapterTest<Us
 
 	@Override
 	protected User doCreateValue(String id, String data) {
-		return new User(id, Role.PUBLIC);
+		return new User(id, data, "someMail", Role.PUBLIC);
 	}
 
 }

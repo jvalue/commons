@@ -12,21 +12,37 @@ import javax.validation.constraints.NotNull;
  */
 public final class User {
 
+	@NotNull private final String id;
 	@NotNull private final String name;
+	@NotNull private final String email;
 	@NotNull private final Role role;
 
 	@JsonCreator
 	public User(
+			@JsonProperty("id") String id,
 			@JsonProperty("name") String name,
+			@JsonProperty("email") String email,
 			@JsonProperty("role") Role role) {
 
+		this.id = id;
 		this.name = name;
+		this.email = email;
 		this.role = role;
+	}
+
+
+	public String getId() {
+		return id;
 	}
 
 
 	public String getName() {
 		return name;
+	}
+
+
+	public String getEmail() {
+		return email;
 	}
 
 
@@ -39,14 +55,16 @@ public final class User {
 	public boolean equals(Object other) {
 		if (other == null || !(other instanceof User)) return false;
 		User user = (User) other;
-		return Objects.equal(name, user.name)
+		return Objects.equal(id, user.id)
+				&& Objects.equal(name, user.name)
+				&& Objects.equal(email, user.email)
 				&& Objects.equal(role, user.role);
 	}
 
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(name, role);
+		return Objects.hashCode(id, name, email, role);
 	}
 
 }

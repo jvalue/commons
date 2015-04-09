@@ -37,7 +37,7 @@ public final class RestrictedToProviderTest {
 
 	private RestrictedToProvider provider;
 
-	private final User adminUser = new User("admin", Role.ADMIN);
+	private final User adminUser = new User("someId", "admin", "someMail", Role.ADMIN);
 	private final BasicCredentials adminCredentials = new BasicCredentials("admin", "admin");
 	private final String adminHeader = "Basic YWRtaW46YWRtaW4="; // admin:admin
 

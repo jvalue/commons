@@ -23,7 +23,7 @@ public final class UserRepository extends RepositoryAdapter<
 		User> {
 
 	static final String DATABASE_NAME = "users";
-	private static final String DOCUMENT_ID = "doc.value.name != null && doc.value.role != null";
+	private static final String DOCUMENT_ID = "doc.value.id != null && doc.value.role != null";
 
 	@Inject
 	UserRepository(@Named(DATABASE_NAME) CouchDbConnector connector) {
@@ -44,13 +44,13 @@ public final class UserRepository extends RepositoryAdapter<
 
 
 		@Override
-		@View(name = "by_id", map = "function(doc) { if (" + DOCUMENT_ID + ") emit(doc.value.name, doc._id)}")
-		public UserDocument findById(String sourceId) {
-			List<UserDocument> sources = queryView("by_id", sourceId);
-			if (sources.isEmpty()) throw new DocumentNotFoundException(sourceId);
-			if (sources.size() > 1)
-				throw new IllegalStateException("found more than one source for id " + sourceId);
-			return sources.get(0);
+		@View(name = "by_id", map = "function(doc) { if (" + DOCUMENT_ID + ") emit(doc.value.id, doc._id)}")
+		public UserDocument findById(String userId) {
+			List<UserDocument> users = queryView("by_id", userId);
+			if (users.isEmpty()) throw new DocumentNotFoundException(userId);
+			if (users.size() > 1)
+				throw new IllegalStateException("found more than one user for id " + userId);
+			return users.get(0);
 		}
 
 
@@ -62,7 +62,7 @@ public final class UserRepository extends RepositoryAdapter<
 
 		@Override
 		public String getIdForValue(User user) {
-			return user.getName();
+			return user.getId();
 		}
 	}
 

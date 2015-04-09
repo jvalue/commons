@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class BasicAuthenticatorTest {
 
-	private final User publicUser = new User("bob", Role.PUBLIC);
+	private final User publicUser = new User("someId", "someName", "someMail", Role.PUBLIC);
 	private final BasicCredentials publicCredentials = new BasicCredentials("user", "pass");
 
 	private BasicAuthenticator authenticator;
