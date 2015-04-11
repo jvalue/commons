@@ -22,7 +22,7 @@ public final class UserRepository extends RepositoryAdapter<
 		UserRepository.UserDocument,
 		User> {
 
-	static final String DATABASE_NAME = "users";
+	public static final String DATABASE_NAME = "users";
 	private static final String DOCUMENT_ID = "doc.value.id != null && doc.value.role != null";
 
 	@Inject
