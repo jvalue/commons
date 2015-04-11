@@ -9,7 +9,6 @@ import org.jvalue.commons.auth.UserDescription;
 import org.jvalue.commons.auth.UserManager;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -44,13 +43,7 @@ public class UserApi {
 	public User addUser(@RestrictedTo(value = Role.ADMIN, isOptional = true) User user, UserDescription userDescription) {
 		// check for valid role (only admins can add admins)
 		if (userDescription.getRole().equals(Role.ADMIN) && user == null) throw new UnauthorizedException("missing admin privileges");
-
-		// store new user
-		String userId = UUID.randomUUID().toString();
-		User newUser = new User(userId, userDescription.getName(), userDescription.getEmail(), userDescription.getRole());
-		userManager.add(user, userDescription.getPassword());
-
-		return newUser;
+		return userManager.add(userDescription);
 	}
 
 

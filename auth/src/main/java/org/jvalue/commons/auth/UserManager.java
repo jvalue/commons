@@ -4,6 +4,7 @@ package org.jvalue.commons.auth;
 import org.ektorp.DocumentNotFoundException;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,15 +49,21 @@ public final class UserManager {
 	}
 
 
-	public void add(User user, String password) {
+	public User add(UserDescription userDescription) {
+		// store new user
+		String userId = UUID.randomUUID().toString();
+		User user = new User(userId, userDescription.getName(), userDescription.getEmail(), userDescription.getRole());
+
 		// store user
 		userRepository.add(user);
 
 		// store credentials
 		byte[] salt = authenticationUtils.generateSalt();
-		byte[] encryptedPassword = authenticationUtils.getEncryptedPassword(password, salt);
+		byte[] encryptedPassword = authenticationUtils.getEncryptedPassword(userDescription.getPassword(), salt);
 		BasicCredentials credentials = new BasicCredentials(user.getId(), encryptedPassword, salt);
 		credentialsRepository.add(credentials);
+
+		return user;
 	}
 
 
