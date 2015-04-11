@@ -28,7 +28,7 @@ public class UserApi {
 	private final UserManager userManager;
 
 	@Inject
-	public UserApi(UserManager userManager) {
+	UserApi(UserManager userManager) {
 		this.userManager = userManager;
 	}
 
@@ -59,7 +59,7 @@ public class UserApi {
 	@Path("/{userId}")
 	public void removeUser(@RestrictedTo(Role.PUBLIC) User user, @PathParam("userId") String userId) {
 		if (!userId.equals(user.getId()) && !user.getRole().equals(Role.ADMIN)) throw new UnauthorizedException();
-		userManager.remove(user);
+		userManager.remove(userManager.findById(userId));
 	}
 
 }
