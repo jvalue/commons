@@ -3,6 +3,7 @@ package org.jvalue.commons.auth.rest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.jvalue.commons.auth.BasicAuthenticationUtils;
 import org.jvalue.commons.auth.Role;
 import org.jvalue.commons.auth.UnauthorizedException;
 import org.jvalue.commons.auth.User;
@@ -21,12 +22,13 @@ import mockit.integration.junit4.JMockit;
 public final class UserApiTest {
 
 	@Mocked private UserManager userManager;
+	@Mocked private BasicAuthenticationUtils authenticationUtils;
 	private UserApi userApi;
 
 
 	@Before
 	public void setupApi() {
-		userApi = new UserApi(userManager);
+		userApi = new UserApi(userManager, authenticationUtils);
 	}
 
 

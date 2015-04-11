@@ -1,6 +1,7 @@
 package org.jvalue.commons.auth.rest;
 
 
+import org.jvalue.commons.auth.BasicAuthenticationUtils;
 import org.jvalue.commons.auth.RestrictedTo;
 import org.jvalue.commons.auth.Role;
 import org.jvalue.commons.auth.UnauthorizedException;
@@ -27,10 +28,12 @@ import javax.ws.rs.core.MediaType;
 public class UserApi {
 
 	private final UserManager userManager;
+	private final BasicAuthenticationUtils authenticationUtils;
 
 	@Inject
-	UserApi(UserManager userManager) {
+	UserApi(UserManager userManager, BasicAuthenticationUtils authenticationUtils) {
 		this.userManager = userManager;
+		this.authenticationUtils = authenticationUtils;
 	}
 
 
@@ -46,7 +49,12 @@ public class UserApi {
 		if (userDescription.getRole().equals(Role.ADMIN) && user == null) throw new UnauthorizedException("missing admin privileges");
 
 		// check if user already exists
-		if (userManager.contains(userDescription.getEmail())) throw RestUtils.createJsonFormattedException("user already registered", 409);
+		if (userManager.contains(userDescription.getEmail()))
+			throw RestUtils.createJsonFormattedException("user already registered", 409);
+
+		// check for partially secure password
+		if (authenticationUtils.isPartiallySecurePassword(userDescription.getPassword()))
+			throw RestUtils.createJsonFormattedException("password must be at least 8 characters and contain numbers", 409);
 
 		return userManager.add(userDescription);
 	}

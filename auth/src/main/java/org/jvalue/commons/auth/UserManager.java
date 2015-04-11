@@ -2,6 +2,7 @@ package org.jvalue.commons.auth;
 
 
 import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.utils.Assert;
 import org.jvalue.commons.utils.Log;
 
 import java.util.List;
@@ -61,9 +62,13 @@ public final class UserManager {
 
 
 	public User add(UserDescription userDescription) {
-		if (contains(userDescription.getEmail())) {
-			throw new IllegalArgumentException("already registered user with email " + userDescription.getEmail());
-		}
+		Assert.assertFalse(
+				contains(userDescription.getEmail()),
+				"already registered user with email " + userDescription.getEmail());
+
+		Assert.assertTrue(
+				authenticationUtils.isPartiallySecurePassword(userDescription.getPassword()),
+				"password must have at least 8 characters and contain numbers");
 
 		// store new user
 		String userId = UUID.randomUUID().toString();

@@ -49,4 +49,19 @@ public final class BasicAuthenticationUtils {
 		}
 	}
 
+
+	/**
+	 * Checks if a certain number of minimum requirements for secure passwords are met (length and
+	 * whether it contains numbers).
+	 */
+	public boolean isPartiallySecurePassword(String password) {
+		// check length
+		if (password == null || password.length() < 8) return false;
+
+		// check for numbers
+		if (!password.matches(".*\\d+.*")) return false;
+
+		return true;
+	}
+
 }

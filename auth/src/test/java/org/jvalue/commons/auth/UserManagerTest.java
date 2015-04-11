@@ -43,7 +43,7 @@ public final class UserManagerTest {
 
 	@Test
 	public void testAdd() throws Exception {
-		final UserDescription description = new UserDescription("someName", "someMail", Role.ADMIN, "somePass");
+		final UserDescription description = new UserDescription("someName", "someMail", Role.ADMIN, "somePass42");
 		new Expectations() {{
 			userRepository.findByEmail(description.getEmail()); result = new DocumentNotFoundException("");
 		}};
