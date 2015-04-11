@@ -49,6 +49,16 @@ public final class UserManager {
 	}
 
 
+	public boolean contains(String userEmail) {
+		try {
+			findByEmail(userEmail);
+			return true;
+		} catch (DocumentNotFoundException dnfe) {
+			return false;
+		}
+	}
+
+
 	public User add(UserDescription userDescription) {
 		// store new user
 		String userId = UUID.randomUUID().toString();
