@@ -2,6 +2,7 @@ package org.jvalue.commons.auth;
 
 
 import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.utils.Log;
 
 import java.util.List;
 import java.util.UUID;
@@ -72,6 +73,8 @@ public final class UserManager {
 		byte[] encryptedPassword = authenticationUtils.getEncryptedPassword(userDescription.getPassword(), salt);
 		BasicCredentials credentials = new BasicCredentials(user.getId(), encryptedPassword, salt);
 		credentialsRepository.add(credentials);
+
+		Log.info("added user " + user.getId());
 
 		return user;
 	}
