@@ -61,6 +61,10 @@ public final class UserManager {
 
 
 	public User add(UserDescription userDescription) {
+		if (contains(userDescription.getEmail())) {
+			throw new IllegalArgumentException("already registered user with email " + userDescription.getEmail());
+		}
+
 		// store new user
 		String userId = UUID.randomUUID().toString();
 		User user = new User(userId, userDescription.getName(), userDescription.getEmail(), userDescription.getRole());

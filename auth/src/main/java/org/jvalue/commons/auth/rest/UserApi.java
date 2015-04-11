@@ -7,6 +7,7 @@ import org.jvalue.commons.auth.UnauthorizedException;
 import org.jvalue.commons.auth.User;
 import org.jvalue.commons.auth.UserDescription;
 import org.jvalue.commons.auth.UserManager;
+import org.jvalue.commons.rest.RestUtils;
 
 import java.util.List;
 
@@ -43,6 +44,10 @@ public class UserApi {
 	public User addUser(@RestrictedTo(value = Role.ADMIN, isOptional = true) User user, UserDescription userDescription) {
 		// check for valid role (only admins can add admins)
 		if (userDescription.getRole().equals(Role.ADMIN) && user == null) throw new UnauthorizedException("missing admin privileges");
+
+		// check if user already exists
+		if (userManager.contains(userDescription.getEmail())) throw RestUtils.createJsonFormattedException("user already registered", 409);
+
 		return userManager.add(userDescription);
 	}
 

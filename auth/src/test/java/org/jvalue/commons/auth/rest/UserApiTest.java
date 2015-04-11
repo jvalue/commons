@@ -9,6 +9,8 @@ import org.jvalue.commons.auth.User;
 import org.jvalue.commons.auth.UserDescription;
 import org.jvalue.commons.auth.UserManager;
 
+import javax.ws.rs.WebApplicationException;
+
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
@@ -28,7 +30,7 @@ public final class UserApiTest {
 	}
 
 
-	public void testAddUserFailure() {
+	public void testGetAllUsers() {
 		userApi.getAllUsers(null);
 		new Expectations() {{
 			userManager.getAll();
@@ -37,16 +39,28 @@ public final class UserApiTest {
 
 
 	@Test(expected = UnauthorizedException.class)
-	public void testAddUserSuccess() {
+	public void testAddUserFailure() {
 		testAddUser(null);
 	}
 
 
-	public void testAddAdminUser() {
+	@Test
+	public void testAddUserSuccess() {
 		testAddUser(new User("", "", "", Role.ADMIN));
 		new Verifications() {{
 			userManager.add((UserDescription) any);
 		}};
+	}
+
+
+	@Test(expected = WebApplicationException.class)
+	public void testAddDuplicateUser() {
+		final String mail = "someMail";
+		new Expectations() {{
+			userManager.contains(mail); result = true;
+		}};
+
+		userApi.addUser(null, new UserDescription("", mail, Role.PUBLIC, ""));
 	}
 
 
