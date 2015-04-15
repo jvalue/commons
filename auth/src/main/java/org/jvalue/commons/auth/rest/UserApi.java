@@ -31,7 +31,7 @@ public class UserApi {
 	private final BasicAuthenticationUtils authenticationUtils;
 
 	@Inject
-	UserApi(UserManager userManager, BasicAuthenticationUtils authenticationUtils) {
+	protected UserApi(UserManager userManager, BasicAuthenticationUtils authenticationUtils) {
 		this.userManager = userManager;
 		this.authenticationUtils = authenticationUtils;
 	}
