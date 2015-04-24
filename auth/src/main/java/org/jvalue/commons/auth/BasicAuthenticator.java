@@ -42,7 +42,11 @@ public final class BasicAuthenticator implements Authenticator {
 		if (colon < 0) return Optional.absent();
 		String email = token.substring(0, colon);
 		String password = token.substring(colon + 1);
+		return authenticate(email,password);
+	}
 
+
+	public Optional<User> authenticate(String email, String password) {
 		try {
 			User user = userManager.findByEmail(email);
 			BasicCredentials credentials = credentialsRepository.findById(user.getId());

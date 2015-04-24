@@ -1,17 +1,19 @@
 package org.jvalue.commons.auth.rest;
 
+import com.google.common.base.Optional;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.jvalue.commons.auth.BasicAuthUserDescription;
 import org.jvalue.commons.auth.BasicAuthUtils;
+import org.jvalue.commons.auth.BasicAuthenticator;
 import org.jvalue.commons.auth.OAuthUtils;
 import org.jvalue.commons.auth.Role;
 import org.jvalue.commons.auth.UnauthorizedException;
 import org.jvalue.commons.auth.User;
-import org.jvalue.commons.auth.BasicAuthUserDescription;
 import org.jvalue.commons.auth.UserManager;
-
-import javax.ws.rs.WebApplicationException;
 
 import mockit.Expectations;
 import mockit.Mocked;
@@ -23,6 +25,7 @@ import mockit.integration.junit4.JMockit;
 public final class UserApiTest {
 
 	@Mocked private UserManager userManager;
+	@Mocked private BasicAuthenticator basicAuthenticator;
 	@Mocked private BasicAuthUtils basicAuthUtils;
 	@Mocked private OAuthUtils oAuthUtils;
 	private UserApi userApi;
@@ -30,7 +33,7 @@ public final class UserApiTest {
 
 	@Before
 	public void setupApi() {
-		userApi = new UserApi(userManager, basicAuthUtils, oAuthUtils);
+		userApi = new UserApi(userManager, basicAuthenticator, basicAuthUtils, oAuthUtils);
 	}
 
 
@@ -57,19 +60,28 @@ public final class UserApiTest {
 	}
 
 
-	@Test(expected = WebApplicationException.class)
 	public void testAddDuplicateUser() {
 		final String mail = "someMail";
+		final String password = "password123";
+		final BasicAuthUserDescription userDescription = new BasicAuthUserDescription("", mail, Role.PUBLIC, password);
+		final User user = new User("", "", userDescription.getEmail(), Role.PUBLIC);
+
 		new Expectations() {{
-			userManager.contains(mail); result = true;
+			basicAuthenticator.authenticate(mail, password);
+			result = Optional.of(userDescription);
 		}};
 
-		userApi.addUser(null, new BasicAuthUserDescription("", mail, Role.PUBLIC, ""));
+		Assert.assertEquals(user, userApi.addUser(null, userDescription));
 	}
 
 
 	private void testAddUser(User user) {
-		BasicAuthUserDescription description = new BasicAuthUserDescription("", "", Role.ADMIN, "");
+		new Expectations() {{
+			basicAuthUtils.isPartiallySecurePassword(anyString);
+			result = true;
+			minTimes = 0;
+		}};
+		BasicAuthUserDescription description = new BasicAuthUserDescription("", "", Role.ADMIN, "password123");
 		userApi.addUser(user, description);
 	}
 

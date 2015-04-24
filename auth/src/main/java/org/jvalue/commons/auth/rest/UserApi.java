@@ -3,9 +3,11 @@ package org.jvalue.commons.auth.rest;
 
 import com.google.common.base.Optional;
 
+import org.ektorp.DocumentNotFoundException;
 import org.jvalue.commons.auth.AbstractUserDescription;
 import org.jvalue.commons.auth.BasicAuthUserDescription;
 import org.jvalue.commons.auth.BasicAuthUtils;
+import org.jvalue.commons.auth.BasicAuthenticator;
 import org.jvalue.commons.auth.OAuthUserDescription;
 import org.jvalue.commons.auth.OAuthUtils;
 import org.jvalue.commons.auth.RestrictedTo;
@@ -33,12 +35,14 @@ import javax.ws.rs.core.MediaType;
 public class UserApi {
 
 	private final UserManager userManager;
+	private final BasicAuthenticator basicAuthenticator;
 	private final BasicAuthUtils basicAuthUtils;
 	private final OAuthUtils oAuthUtils;
 
 	@Inject
-	protected UserApi(UserManager userManager, BasicAuthUtils basicAuthUtils, OAuthUtils oAuthUtils) {
+	protected UserApi(UserManager userManager, BasicAuthenticator basicAuthenticator, BasicAuthUtils basicAuthUtils, OAuthUtils oAuthUtils) {
 		this.userManager = userManager;
+		this.basicAuthenticator = basicAuthenticator;
 		this.basicAuthUtils = basicAuthUtils;
 		this.oAuthUtils = oAuthUtils;
 	}
@@ -84,12 +88,16 @@ public class UserApi {
 
 
 	private User addUser(BasicAuthUserDescription userDescription) {
-		assertUserNotRegistered(userDescription.getEmail());
-
 		// check for partially secure password
 		if (!basicAuthUtils.isPartiallySecurePassword(userDescription.getPassword()))
-			throw RestUtils.createJsonFormattedException("password must be at least 8 characters and contain numbers", 409);
+			throw RestUtils.createJsonFormattedException("password must be at least 8 characters and contain numbers", 400);
 
+		// if already registered, simply return user
+		Optional<User> registeredUser = basicAuthenticator.authenticate(userDescription.getEmail(), userDescription.getPassword());
+		if (registeredUser.isPresent()) return registeredUser.get();
+
+		// else register new user
+		assertNotRegistered(userDescription.getEmail());
 		return userManager.add(userDescription);
 	}
 
@@ -99,14 +107,29 @@ public class UserApi {
 		Optional<OAuthUtils.OAuthDetails> tokenDetails = oAuthUtils.checkAuthHeader(userDescription.getAuthToken());
 		if (!tokenDetails.isPresent()) throw new UnauthorizedException();
 
-		assertUserNotRegistered(tokenDetails.get().getEmail());
+		// if already registered simply return user
+		Optional<User> registeredUser = findUserByEmail(tokenDetails.get().getEmail());
+		if (registeredUser.isPresent()) return registeredUser.get();
 
+		// else register new user
+		assertNotRegistered(tokenDetails.get().getEmail());
 		return userManager.add(userDescription, tokenDetails.get());
 	}
 
 
-	private void assertUserNotRegistered(String email) {
-		if (userManager.contains(email)) throw RestUtils.createJsonFormattedException("user already registered", 409);
+	private void assertNotRegistered(String email) {
+		if (userManager.contains(email)) {
+			System.out.println("already registered");
+			throw RestUtils.createJsonFormattedException("email already registered", 409);
+		}
+	}
+
+	private Optional<User> findUserByEmail(String email) {
+		try {
+			return Optional.of(userManager.findByEmail(email));
+		} catch (DocumentNotFoundException dnfe) {
+			return Optional.absent();
+		}
 	}
 
 }
