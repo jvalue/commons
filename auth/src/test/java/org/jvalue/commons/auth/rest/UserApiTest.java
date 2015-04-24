@@ -3,11 +3,12 @@ package org.jvalue.commons.auth.rest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.jvalue.commons.auth.BasicAuthenticationUtils;
+import org.jvalue.commons.auth.BasicAuthUtils;
+import org.jvalue.commons.auth.OAuthUtils;
 import org.jvalue.commons.auth.Role;
 import org.jvalue.commons.auth.UnauthorizedException;
 import org.jvalue.commons.auth.User;
-import org.jvalue.commons.auth.UserDescription;
+import org.jvalue.commons.auth.BasicAuthUserDescription;
 import org.jvalue.commons.auth.UserManager;
 
 import javax.ws.rs.WebApplicationException;
@@ -22,13 +23,14 @@ import mockit.integration.junit4.JMockit;
 public final class UserApiTest {
 
 	@Mocked private UserManager userManager;
-	@Mocked private BasicAuthenticationUtils authenticationUtils;
+	@Mocked private BasicAuthUtils basicAuthUtils;
+	@Mocked private OAuthUtils oAuthUtils;
 	private UserApi userApi;
 
 
 	@Before
 	public void setupApi() {
-		userApi = new UserApi(userManager, authenticationUtils);
+		userApi = new UserApi(userManager, basicAuthUtils, oAuthUtils);
 	}
 
 
@@ -50,7 +52,7 @@ public final class UserApiTest {
 	public void testAddUserSuccess() {
 		testAddUser(new User("", "", "", Role.ADMIN));
 		new Verifications() {{
-			userManager.add((UserDescription) any);
+			userManager.add((BasicAuthUserDescription) any);
 		}};
 	}
 
@@ -62,12 +64,12 @@ public final class UserApiTest {
 			userManager.contains(mail); result = true;
 		}};
 
-		userApi.addUser(null, new UserDescription("", mail, Role.PUBLIC, ""));
+		userApi.addUser(null, new BasicAuthUserDescription("", mail, Role.PUBLIC, ""));
 	}
 
 
 	private void testAddUser(User user) {
-		UserDescription description = new UserDescription("", "", Role.ADMIN, "");
+		BasicAuthUserDescription description = new BasicAuthUserDescription("", "", Role.ADMIN, "");
 		userApi.addUser(user, description);
 	}
 

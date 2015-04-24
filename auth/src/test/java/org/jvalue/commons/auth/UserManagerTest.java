@@ -16,7 +16,7 @@ public final class UserManagerTest {
 
 	@Mocked private UserRepository userRepository;
 	@Mocked private BasicCredentialsRepository credentialsRepository;
-	private final BasicAuthenticationUtils authenticationUtils = new BasicAuthenticationUtils();
+	private final BasicAuthUtils authenticationUtils = new BasicAuthUtils();
 
 	private UserManager userManager;
 
@@ -43,7 +43,7 @@ public final class UserManagerTest {
 
 	@Test
 	public void testAdd() throws Exception {
-		final UserDescription description = new UserDescription("someName", "someMail", Role.ADMIN, "somePass42");
+		final BasicAuthUserDescription description = new BasicAuthUserDescription("someName", "someMail", Role.ADMIN, "somePass42");
 		new Expectations() {{
 			userRepository.findByEmail(description.getEmail()); result = new DocumentNotFoundException("");
 		}};

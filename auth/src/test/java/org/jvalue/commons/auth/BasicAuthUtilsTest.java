@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-public final class BasicAuthenticationUtilsTest {
+public final class BasicAuthUtilsTest {
 
-	private final BasicAuthenticationUtils utils = new BasicAuthenticationUtils();
+	private final BasicAuthUtils utils = new BasicAuthUtils();
 
 	@Test
 	public void testIsPartiallySecurePassword() {

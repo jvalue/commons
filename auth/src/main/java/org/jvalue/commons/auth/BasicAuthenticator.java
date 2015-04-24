@@ -17,13 +17,13 @@ public final class BasicAuthenticator implements Authenticator {
 
 	private final UserManager userManager;
 	private final BasicCredentialsRepository credentialsRepository;
-	private final BasicAuthenticationUtils authenticationUtils;
+	private final BasicAuthUtils authenticationUtils;
 
 	@Inject
 	BasicAuthenticator(
 			UserManager userManager,
 			BasicCredentialsRepository credentialsRepository,
-			BasicAuthenticationUtils authenticationUtils) {
+			BasicAuthUtils authenticationUtils) {
 
 		this.userManager = userManager;
 		this.credentialsRepository = credentialsRepository;

@@ -24,7 +24,7 @@ public class BasicAuthenticatorTest {
 
 	@Mocked private UserManager userManager;
 	@Mocked private BasicCredentialsRepository credentialsRepository;
-	@Mocked private BasicAuthenticationUtils authenticationUtils;
+	@Mocked private BasicAuthUtils authenticationUtils;
 
 
 	@Before

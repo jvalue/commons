@@ -21,14 +21,14 @@ public final class UserManager {
 
 	// basic auth
 	private final BasicCredentialsRepository credentialsRepository;
-	private final BasicAuthenticationUtils authenticationUtils;
+	private final BasicAuthUtils authenticationUtils;
 
 
 	@Inject
 	UserManager(
 			UserRepository userRepository,
 			BasicCredentialsRepository credentialsRepository,
-			BasicAuthenticationUtils authenticationUtils) {
+			BasicAuthUtils authenticationUtils) {
 
 		this.userRepository = userRepository;
 		this.credentialsRepository = credentialsRepository;
@@ -61,11 +61,8 @@ public final class UserManager {
 	}
 
 
-	public User add(UserDescription userDescription) {
-		Assert.assertFalse(
-				contains(userDescription.getEmail()),
-				"already registered user with email " + userDescription.getEmail());
-
+	public User add(BasicAuthUserDescription userDescription) {
+		assertUserNotRegistered(userDescription.getEmail());
 		Assert.assertTrue(
 				authenticationUtils.isPartiallySecurePassword(userDescription.getPassword()),
 				"password must have at least 8 characters and contain numbers");
@@ -84,7 +81,21 @@ public final class UserManager {
 		credentialsRepository.add(credentials);
 
 		Log.info("added user " + user.getId());
+		return user;
+	}
 
+
+	public User add(OAuthUserDescription userDescription, OAuthUtils.OAuthDetails oAuthDetails) {
+		assertUserNotRegistered(oAuthDetails.getEmail());
+
+		// store new user
+		String userId = UUID.randomUUID().toString();
+		User user = new User(userId, oAuthDetails.getGoogleUserId(), oAuthDetails.getEmail(), userDescription.getRole());
+
+		// store user
+		userRepository.add(user);
+
+		Log.info("added user " + user.getId());
 		return user;
 	}
 
@@ -97,6 +108,11 @@ public final class UserManager {
 		} catch (DocumentNotFoundException dnfe) {
 			// user wasn't using basic auth
 		}
+	}
+
+
+	private void assertUserNotRegistered(String email) {
+		Assert.assertFalse(contains(email), "already registered user with email " + email);
 	}
 
 }

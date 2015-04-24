@@ -15,16 +15,22 @@ import javax.inject.Singleton;
 public final class AuthBinder extends AbstractBinder {
 
 	private final BasicAuthenticator basicAuthenticator;
+	private final OAuthAuthenticator oAuthAuthenticator;
 
 	@Inject
-	AuthBinder(BasicAuthenticator basicAuthenticator) {
+	AuthBinder(
+			BasicAuthenticator basicAuthenticator,
+			OAuthAuthenticator oAuthAuthenticator) {
+
 		this.basicAuthenticator = basicAuthenticator;
+		this.oAuthAuthenticator = oAuthAuthenticator;
 	}
 
 
 	@Override
 	protected void configure() {
 		bind(basicAuthenticator);
+		bind(oAuthAuthenticator);
 
 		bind(RestrictedToProvider.class)
 				.to(ValueFactoryProvider.class)

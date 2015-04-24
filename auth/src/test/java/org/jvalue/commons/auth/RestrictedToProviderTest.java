@@ -34,23 +34,33 @@ public final class RestrictedToProviderTest {
 	@Mocked private ContainerRequest containerRequest;
 
 	@Mocked private BasicAuthenticator basicAuthenticator;
+	@Mocked private OAuthAuthenticator oAuthAuthenticator;
 
 	private RestrictedToProvider provider;
 
 	private final User adminUser = new User("someId", "admin", "someMail", Role.ADMIN);
 	private final User publicUser = new User("someId", "admin", "someMail", Role.PUBLIC);
-	private final String adminHeader = "Basic YWRtaW46YWRtaW4="; // admin:admin
+	private final String basicAuthHeader = "Basic YWRtaW46YWRtaW4="; // admin:admin
+	private final String oAuthHeader = "Bearer 12345"; // dummy values
 
 
 	@Before
 	public void setup() {
-		provider = new RestrictedToProvider(mpep, serviceLocator, basicAuthenticator);
+		provider = new RestrictedToProvider(mpep, serviceLocator, basicAuthenticator, oAuthAuthenticator);
 	}
 
 
 	@Test
-	public void testValidAuth() {
-		Factory<User> factory = setupMocks(adminHeader, adminUser, false);
+	public void testValidBasicAuth() {
+		Factory<User> factory = setupMocks(basicAuthenticator, basicAuthHeader, adminUser, false);
+		User user = factory.provide();
+		Assert.assertEquals(adminUser, user);
+	}
+
+
+	@Test
+	public void testValidOauth() {
+		Factory<User> factory = setupMocks(oAuthAuthenticator, oAuthHeader, adminUser, false);
 		User user = factory.provide();
 		Assert.assertEquals(adminUser, user);
 	}
@@ -58,34 +68,34 @@ public final class RestrictedToProviderTest {
 
 	@Test(expected = UnauthorizedException.class)
 	public void testMissingHeader() {
-		Factory<User> factory = setupMocks(null, adminUser, false);
+		Factory<User> factory = setupMocks(basicAuthenticator, null, adminUser, false);
 		factory.provide();
 	}
 
 
 	@Test(expected = UnauthorizedException.class)
 	public void testInvalidCredentials() {
-		Factory<User> factory = setupMocks("Basic Zm9vOmJhcg==", null, false);
+		Factory<User> factory = setupMocks(basicAuthenticator, "Basic Zm9vOmJhcg==", null, false);
 		factory.provide();
 	}
 
 
 	@Test(expected = UnauthorizedException.class)
 	public void testInvalidRole() {
-		Factory<User> factory = setupMocks(adminHeader, publicUser, false);
+		Factory<User> factory = setupMocks(basicAuthenticator, basicAuthHeader, publicUser, false);
 		factory.provide();
 	}
 
 
 	public void testOptional() {
-		Factory<User> factory = setupMocks(adminHeader, publicUser, true);
+		Factory<User> factory = setupMocks(basicAuthenticator, basicAuthHeader, publicUser, true);
 		Assert.assertNull(factory.provide());
 	}
 
 
-	private Factory<User> setupMocks(final String authHeader, final User user, final boolean isAuthOptional) {
+	private Factory<User> setupMocks(final Authenticator authenticator, final String authHeader, final User user, final boolean isAuthOptional) {
 		new Expectations() {{
-			basicAuthenticator.authenticate(authHeader);
+			authenticator.authenticate(authHeader);
 			result = Optional.fromNullable(user);
 			minTimes = 0;
 

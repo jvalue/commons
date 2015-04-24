@@ -10,9 +10,12 @@ import javax.validation.constraints.NotNull;
 /**
  * A registered user.
  */
-public final class User extends AbstractUser {
+public final class User {
 
 	@NotNull private final String id;
+	@NotNull private final String name;
+	@NotNull private final String email;
+	@NotNull private final Role role;
 
 	@JsonCreator
 	public User(
@@ -21,8 +24,10 @@ public final class User extends AbstractUser {
 			@JsonProperty("email") String email,
 			@JsonProperty("role") Role role) {
 
-		super(name, email, role);
 		this.id = id;
+		this.email = email;
+		this.name = name;
+		this.role = role;
 	}
 
 
@@ -31,17 +36,35 @@ public final class User extends AbstractUser {
 	}
 
 
+	public String getName() {
+		return name;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public Role getRole() {
+		return role;
+	}
+
+
 	@Override
 	public boolean equals(Object other) {
-		if (!super.equals(other) || !(other instanceof User)) return false;
+		if (other == null || !(other instanceof User)) return false;
 		User user = (User) other;
-		return Objects.equal(id, user.id);
+		return Objects.equal(id, user.id)
+				&& Objects.equal(name, user.name)
+				&& Objects.equal(email, user.email)
+				&& Objects.equal(role, user.role);
 	}
 
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(super.hashCode(), id);
+		return Objects.hashCode(id, name, email, role);
 	}
 
 }
