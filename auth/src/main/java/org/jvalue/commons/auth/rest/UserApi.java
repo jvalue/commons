@@ -68,6 +68,13 @@ public class UserApi {
 	}
 
 
+	@GET
+	@Path("/me")
+	public User getUser(@RestrictedTo(Role.PUBLIC) User user) {
+		return user;
+	}
+
+
 	@DELETE
 	@Path("/{userId}")
 	public void removeUser(@RestrictedTo(Role.PUBLIC) User user, @PathParam("userId") String userId) {
