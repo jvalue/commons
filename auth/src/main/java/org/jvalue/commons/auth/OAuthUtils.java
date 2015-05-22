@@ -38,9 +38,9 @@ public final class OAuthUtils {
 	}
 
 
-	public Optional<OAuthDetails> checkAuthHeader(String authHeader) {
+	public Optional<OAuthDetails> checkAuthHeader(String authToken) {
 		try {
-			GoogleIdToken token = GoogleIdToken.parse(jsonFactory, authHeader);
+			GoogleIdToken token = GoogleIdToken.parse(jsonFactory, authToken);
 
 			if (tokenVerifier.verify(token)) {
 				GoogleIdToken.Payload payload = token.getPayload();

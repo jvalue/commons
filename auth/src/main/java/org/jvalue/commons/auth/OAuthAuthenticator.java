@@ -22,9 +22,9 @@ public class OAuthAuthenticator implements Authenticator {
 
 	@Override
 	public Optional<User> authenticate(String tokenString) {
-		Optional<OAuthUtils.OAuthDetails> authDetails = authUtils.checkAuthHeader(tokenString);
+		Optional<OAuthUtils.OAuthDetails> authDetails = authUtils.checkAuthHeader(tokenString.replaceFirst("Bearer ", ""));
 		if (!authDetails.isPresent()) return Optional.absent();
-		if (userManager.contains(authDetails.get().getEmail())) return Optional.absent();
+		if (!userManager.contains(authDetails.get().getEmail())) return Optional.absent();
 		return Optional.of(userManager.findByEmail(authDetails.get().getEmail()));
 	}
 
