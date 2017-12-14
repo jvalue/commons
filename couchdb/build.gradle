@@ -1,9 +1,9 @@
 dependencies {
-    compile 'org.ektorp:org.ektorp:1.4.2'
-    compile 'javax.validation:validation-api:1.1.0.Final'
+    compile 'org.ektorp:org.ektorp:1.5.0'
+    compile 'javax.validation:validation-api:2.0.0.Final'
     compile project(':models')
     compile project(':rest')
 
-    testCompile 'junit:junit:4.11'
-    testCompile 'org.jmockit:jmockit:1.13'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.jmockit:jmockit:1.37'
 }
