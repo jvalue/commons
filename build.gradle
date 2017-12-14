@@ -53,13 +53,28 @@ subprojects {
     }
     check.dependsOn integrationTest
 
-    // publishing to jcenter
+    // publishing to nexus
     publishing {
+        if (!project.ext.has('nexusUsername')) {
+            project.ext.nexusUsername = ''
+        }
+        if (!project.ext.has('nexusPassword')) {
+            project.ext.nexusPassword = ''
+        }
         publications {
-            mavenJava(MavenPublication) {
+            nexusJava(MavenPublication) {
                 from components.java
                 artifact sourcesJar
                 artifact javadocJar
+            }
+        }
+        repositories {
+            maven {
+                url 'https://mojo-maven.cs.fau.de/repository/public-releases/'
+                credentials {
+                    username nexusUsername
+                    password nexusPassword
+                }
             }
         }
     }
