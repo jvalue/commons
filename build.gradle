@@ -28,7 +28,7 @@ subprojects {
 
     // gradle wrapper
     task wrapper(type: Wrapper) {
-        gradleVersion = '2.3'
+        gradleVersion = '4.4'
     }
 
     // show java compiler warnings
@@ -48,7 +48,7 @@ subprojects {
         }
     }
     task integrationTest(type: Test) {
-        testClassesDir = sourceSets.integrationTest.output.classesDir
+        testClassesDirs = sourceSets.integrationTest.output.classesDirs
         classpath = sourceSets.integrationTest.runtimeClasspath
     }
     check.dependsOn integrationTest
