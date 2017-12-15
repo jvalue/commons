@@ -5,5 +5,5 @@ dependencies {
     compile project(':models')
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.jmockit:jmockit:1.37'
+    testCompile 'org.jmockit:jmockit:1.13'
 }
