@@ -4,16 +4,34 @@ package org.jvalue.commons.utils;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Check if a HTTP service is available.
+ * If a HTTP connection cant't be established, it
+ * will wait a and retry to connect to the service.
+ */
 public final class HttpServiceCheck {
 
-	private static final int DEFAULT_RETRIES = 50;
-	private static final int DEFAULT_SLEEP_TIME_BETWEEN_RETRIES = 3000;
+	public static final int DEFAULT_RETRIES = 50;
+	public static final int DEFAULT_SLEEP_TIME_BETWEEN_RETRIES = 3000;
 
+	/**
+	 * Check if HTTP service is available.
+	 * Default amount of retries are {@value #DEFAULT_RETRIES}.
+	 * Default time to wait until next retry is {@value #DEFAULT_SLEEP_TIME_BETWEEN_RETRIES}.
+	 * @param url URL of the HTTP service to check.
+	 * @return true if the service is available and false if not.
+	 */
 	public static boolean check(String url) {
 		return doCheck(url, DEFAULT_RETRIES, DEFAULT_SLEEP_TIME_BETWEEN_RETRIES);
 	}
 
-
+	/**
+	 * Check if HTTP service is available.
+	 * @param url URL of the HTTP service to check
+	 * @param retries amount of retries until fail
+	 * @param sleepTimeBetweenRetries time to wait until next retry in milliseconds
+	 * @return true if the service is available and false if not.
+	 */
 	public static boolean check(String url, int retries, int sleepTimeBetweenRetries) {
 		return doCheck(url, retries, sleepTimeBetweenRetries);
 	}
