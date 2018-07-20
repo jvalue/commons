@@ -1,0 +1,8 @@
+dependencies {
+	compile 'javax.validation:validation-api:2.0.0.Final'
+	compile project(':models')
+	compile project(':rest')
+
+	testCompile 'junit:junit:4.12'
+	testCompile 'org.jmockit:jmockit:1.13'
+}
