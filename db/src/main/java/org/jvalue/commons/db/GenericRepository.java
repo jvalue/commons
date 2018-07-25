@@ -2,7 +2,7 @@ package org.jvalue.commons.db;
 
 import java.util.List;
 
-public interface IRepository<V> {
+public interface GenericRepository<V> {
 	V findById(String Id);
 	void add(V Value);
 	void update(V value);

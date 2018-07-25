@@ -9,8 +9,8 @@ public abstract class DbConnectorFactory<T,C> {
 	protected final T dbInstance;
 	protected final String dbPrefix;
 
-	public DbConnectorFactory(T couchDbInstance, String dbPrefix) {
-		this.dbInstance = couchDbInstance;
+	public DbConnectorFactory(T dbInstance, String dbPrefix) {
+		this.dbInstance = dbInstance;
 		this.dbPrefix = dbPrefix;
 	}
 

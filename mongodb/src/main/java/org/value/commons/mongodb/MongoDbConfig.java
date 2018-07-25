@@ -3,18 +3,10 @@ package org.value.commons.mongodb;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jvalue.commons.Credentials;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import org.jvalue.commons.db.DbConfig;
 
 
-public final class MongoDbConfig {
-
-	@NotNull private final String url;
-	@NotNull private final String dbPrefix;
-	@NotNull @Valid private final Credentials admin;
-	@Min(1) private final int maxConnections;
+public final class MongoDbConfig extends DbConfig {
 
 	@JsonCreator
 	public MongoDbConfig(
@@ -22,31 +14,6 @@ public final class MongoDbConfig {
 			@JsonProperty("dbPrefix") String dbPrefix,
 			@JsonProperty("admin") Credentials admin,
 			@JsonProperty("maxConnections") int maxConnections) {
-
-		this.url = url;
-		this.dbPrefix = dbPrefix;
-		this.admin = admin;
-		this.maxConnections = maxConnections;
+		super(url, dbPrefix, admin, maxConnections);
 	}
-
-
-	public String getUrl() {
-		return url;
-	}
-
-
-	public String getDbPrefix() {
-		return dbPrefix;
-	}
-
-
-	public Credentials getAdmin() {
-		return admin;
-	}
-
-
-	public int getMaxConnections() {
-		return maxConnections;
-	}
-
 }
