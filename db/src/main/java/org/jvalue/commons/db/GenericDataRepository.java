@@ -1,7 +1,7 @@
 package org.jvalue.commons.db;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.jvalue.ods.api.data.Data;
+import org.jvalue.commons.db.data.Data;
 
 import java.util.Collection;
 import java.util.List;

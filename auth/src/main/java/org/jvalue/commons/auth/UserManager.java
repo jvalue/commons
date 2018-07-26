@@ -2,6 +2,7 @@ package org.jvalue.commons.auth;
 
 
 import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.db.GenericRepository;
 import org.jvalue.commons.utils.Assert;
 import org.jvalue.commons.utils.Log;
 
@@ -17,21 +18,21 @@ import javax.inject.Singleton;
 @Singleton
 public final class UserManager {
 
-	private final UserRepository userRepository;
+	private final GenericRepository<User> userRepository;
 
 	// basic auth
-	private final BasicCredentialsRepository credentialsRepository;
+	private final GenericRepository<BasicCredentials> credentialsRepository;
 	private final BasicAuthUtils authenticationUtils;
 
 
 	@Inject
 	UserManager(
-			UserRepository userRepository,
-			BasicCredentialsRepository credentialsRepository,
+			UserRepositoryFactory userRepositoryFactory,
+			BasicCredentialsRepositoryFactory basicCredentialsRepositoryFactory,
 			BasicAuthUtils authenticationUtils) {
 
-		this.userRepository = userRepository;
-		this.credentialsRepository = credentialsRepository;
+		this.userRepository = userRepositoryFactory.createUserRepository();
+		this.credentialsRepository = basicCredentialsRepositoryFactory.createBasicCredentialRepository();
 		this.authenticationUtils = authenticationUtils;
 	}
 
@@ -47,7 +48,7 @@ public final class UserManager {
 
 
 	public User findByEmail(String userEmail) {
-		return userRepository.findByEmail(userEmail);
+		return ((UserRepository) userRepository).findByEmail(userEmail);
 	}
 
 

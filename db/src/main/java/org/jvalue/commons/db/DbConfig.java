@@ -14,7 +14,7 @@ public abstract class DbConfig {
 
 	@NotNull protected final String url;
 	@NotNull protected final String dbPrefix;
-	@NotNull @Valid protected final Credentials admin;
+	@Valid protected final Credentials admin;
 	@Min(1) protected final int maxConnections;
 
 	@JsonCreator

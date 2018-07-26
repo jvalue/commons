@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.io.BaseEncoding;
 
 import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.db.GenericRepository;
 
 import java.nio.charset.StandardCharsets;
 
@@ -16,17 +17,17 @@ import javax.inject.Inject;
 public final class BasicAuthenticator implements Authenticator {
 
 	private final UserManager userManager;
-	private final BasicCredentialsRepository credentialsRepository;
+	private final GenericRepository<BasicCredentials> credentialsRepository;
 	private final BasicAuthUtils authenticationUtils;
 
 	@Inject
 	BasicAuthenticator(
 			UserManager userManager,
-			BasicCredentialsRepository credentialsRepository,
+			BasicCredentialsRepositoryFactory basicCredentialsRepositoryFactory,
 			BasicAuthUtils authenticationUtils) {
 
 		this.userManager = userManager;
-		this.credentialsRepository = credentialsRepository;
+		this.credentialsRepository = basicCredentialsRepositoryFactory.createBasicCredentialRepository();
 		this.authenticationUtils  = authenticationUtils;
 	}
 

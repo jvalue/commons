@@ -11,23 +11,23 @@ import org.ektorp.support.View;
 import org.jvalue.commons.couchdb.DbDocument;
 import org.jvalue.commons.couchdb.DbDocumentAdaptable;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
+import org.jvalue.commons.db.DbConnectorFactory;
+import org.jvalue.commons.db.GenericRepository;
 
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public final class UserRepository extends RepositoryAdapter<
 		UserRepository.UserCouchDbRepository,
 		UserRepository.UserDocument,
-		User> {
+		User> implements GenericRepository<User> {
 
 	public static final String DATABASE_NAME = "users";
 	private static final String DOCUMENT_ID = "doc.value.id != null && doc.value.role != null";
 
-	@Inject
-	UserRepository(@Named(DATABASE_NAME) CouchDbConnector connector) {
-		super(new UserCouchDbRepository(connector));
+	UserRepository(DbConnectorFactory connector) {
+		super(new UserCouchDbRepository((CouchDbConnector) connector.createConnector(DATABASE_NAME,true)));
 	}
 
 

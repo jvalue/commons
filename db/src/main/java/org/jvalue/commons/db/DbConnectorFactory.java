@@ -15,7 +15,7 @@ public abstract class DbConnectorFactory<T,C> {
 	}
 
 
-	public C createConnector(String databaseName, boolean createIfNotExists) {
+	public C createConnector(String databaseName, boolean createIfNotExists)  {
 		return doCreateConnector(databaseName, createIfNotExists);
 	}
 
