@@ -4,8 +4,8 @@ package org.jvalue.commons.couchdb.test;
 import org.ektorp.DocumentNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.jvalue.commons.couchdb.DbConnectorFactory;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
+import org.jvalue.commons.db.DbConnectorFactory;
 
 import java.util.List;
 

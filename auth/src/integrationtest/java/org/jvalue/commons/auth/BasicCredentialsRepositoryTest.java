@@ -9,7 +9,7 @@ public final class BasicCredentialsRepositoryTest extends AbstractRepositoryAdap
 
 	@Override
 	protected RepositoryAdapter<?, ?, BasicCredentials> doCreateAdapter(DbConnectorFactory connectorFactory) {
-		return new BasicCredentialsRepository(connectorFactory.createConnector(getClass().getSimpleName(), true));
+		return new BasicCredentialsRepository((DbConnectorFactory) connectorFactory.createConnector(getClass().getSimpleName(), true));
 	}
 
 	@Override

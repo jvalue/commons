@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
+import org.jvalue.commons.db.DbConnectorFactory;
 
 @RunWith(JMockit.class)
 public class BasicAuthenticatorTest {
@@ -22,6 +23,9 @@ public class BasicAuthenticatorTest {
 
 	private BasicAuthenticator authenticator;
 
+	@Mocked BasicCredentialsRepositoryFactory basicCredentialsRepositoryFactory;
+
+
 	@Mocked private UserManager userManager;
 	@Mocked private BasicCredentialsRepository credentialsRepository;
 	@Mocked private BasicAuthUtils authenticationUtils;
@@ -29,7 +33,7 @@ public class BasicAuthenticatorTest {
 
 	@Before
 	public void setup() {
-		authenticator = new BasicAuthenticator(userManager, credentialsRepository, authenticationUtils);
+		authenticator = new BasicAuthenticator(userManager, basicCredentialsRepositoryFactory, authenticationUtils);
 	}
 
 

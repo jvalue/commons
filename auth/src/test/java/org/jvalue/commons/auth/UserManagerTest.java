@@ -10,9 +10,14 @@ import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
+import org.jvalue.commons.db.DbConnectorFactory;
 
 @RunWith(JMockit.class)
 public final class UserManagerTest {
+
+	@Mocked UserRepositoryFactory userRepositoryFactory;
+	@Mocked BasicCredentialsRepositoryFactory basicCredentialsRepositoryFactory;
+
 
 	@Mocked private UserRepository userRepository;
 	@Mocked private BasicCredentialsRepository credentialsRepository;
@@ -22,7 +27,7 @@ public final class UserManagerTest {
 
 	@Before
 	public void setupManager() {
-		userManager = new UserManager(userRepository, credentialsRepository, authenticationUtils);
+		userManager = new UserManager(userRepositoryFactory, basicCredentialsRepositoryFactory, authenticationUtils);
 	}
 
 
