@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
-import org.jvalue.commons.db.DbConnectorFactory;
+import org.jvalue.commons.auth.couchdb.BasicCredentialsRepository;
 
 @RunWith(JMockit.class)
 public class BasicAuthenticatorTest {

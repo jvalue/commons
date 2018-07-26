@@ -10,7 +10,8 @@ import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
-import org.jvalue.commons.db.DbConnectorFactory;
+import org.jvalue.commons.auth.couchdb.BasicCredentialsRepository;
+import org.jvalue.commons.auth.couchdb.UserRepository;
 
 @RunWith(JMockit.class)
 public final class UserManagerTest {

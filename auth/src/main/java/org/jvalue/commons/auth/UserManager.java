@@ -2,7 +2,9 @@ package org.jvalue.commons.auth;
 
 
 import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.auth.couchdb.UserRepository;
 import org.jvalue.commons.db.GenericRepository;
+import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.jvalue.commons.utils.Assert;
 import org.jvalue.commons.utils.Log;
 
@@ -23,7 +25,6 @@ public final class UserManager {
 	// basic auth
 	private final GenericRepository<BasicCredentials> credentialsRepository;
 	private final BasicAuthUtils authenticationUtils;
-
 
 	@Inject
 	UserManager(
@@ -48,7 +49,7 @@ public final class UserManager {
 
 
 	public User findByEmail(String userEmail) {
-		return ((UserRepository) userRepository).findByEmail(userEmail);
+		return ((GenericUserRepository<User>) userRepository).findByEmail(userEmail);
 	}
 
 

@@ -1,5 +1,6 @@
 package org.jvalue.commons.auth;
 
+import org.jvalue.commons.auth.couchdb.BasicCredentialsRepository;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.GenericRepository;
 
