@@ -2,7 +2,7 @@ package org.jvalue.commons.auth;
 
 import org.jvalue.commons.auth.couchdb.UserRepository;
 import org.jvalue.commons.db.DbConnectorFactory;
-import org.jvalue.commons.db.GenericRepository;
+import org.jvalue.commons.db.repositories.GenericRepository;
 
 import javax.inject.Inject;
 

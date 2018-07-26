@@ -5,7 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.io.BaseEncoding;
 
 import org.ektorp.DocumentNotFoundException;
-import org.jvalue.commons.db.GenericRepository;
+import org.jvalue.commons.db.repositories.GenericRepository;
 
 import java.nio.charset.StandardCharsets;
 

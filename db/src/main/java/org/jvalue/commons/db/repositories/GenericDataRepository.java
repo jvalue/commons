@@ -1,6 +1,7 @@
-package org.jvalue.commons.db;
+package org.jvalue.commons.db.repositories;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.jvalue.commons.db.GenericDocumentOperationResult;
 import org.jvalue.commons.db.data.Data;
 
 import java.util.Collection;

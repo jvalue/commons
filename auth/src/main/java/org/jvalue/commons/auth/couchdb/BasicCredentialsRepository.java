@@ -13,7 +13,7 @@ import org.jvalue.commons.couchdb.DbDocument;
 import org.jvalue.commons.couchdb.DbDocumentAdaptable;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.db.DbConnectorFactory;
-import org.jvalue.commons.db.GenericRepository;
+import org.jvalue.commons.db.repositories.GenericRepository;
 
 import java.util.List;
 

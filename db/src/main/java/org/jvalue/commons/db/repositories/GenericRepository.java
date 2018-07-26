@@ -1,4 +1,4 @@
-package org.jvalue.commons.db;
+package org.jvalue.commons.db.repositories;
 
 import java.util.List;
 
