@@ -8,12 +8,12 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.DocumentNotFoundException;
 import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.View;
+import org.jvalue.commons.auth.GenericUserRepository;
 import org.jvalue.commons.auth.User;
 import org.jvalue.commons.couchdb.DbDocument;
 import org.jvalue.commons.couchdb.DbDocumentAdaptable;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.db.DbConnectorFactory;
-import org.jvalue.commons.db.repositories.GenericUserRepository;
 
 import java.util.List;
 

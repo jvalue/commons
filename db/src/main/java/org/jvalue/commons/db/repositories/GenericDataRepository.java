@@ -1,6 +1,7 @@
 package org.jvalue.commons.db.repositories;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.jvalue.commons.EntityBase;
 import org.jvalue.commons.db.GenericDocumentOperationResult;
 import org.jvalue.commons.db.data.Data;
 
@@ -8,20 +9,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public interface GenericDataRepository<View, V> extends GenericRepository<V> {
-	JsonNode findByDomainId(String domainId);
+public interface GenericDataRepository<V extends EntityBase, R> {
+	R findByDomainId(String domainId);
 
-	List<JsonNode> executeQuery(View view, String param);
+	List<JsonNode> executeQuery(V view, String param);
 
-	void addQuery(View view);
+	void addQuery(V view);
 
-	void removeQuery(View view);
+	void removeQuery(V view);
 
-	boolean containsQuery(View view);
+	boolean containsQuery(V view);
 
-	Map<String, JsonNode> getData(Collection<String> ids);
+	Map<String, R> getBulk(Collection<String> ids);
 
-	Collection<GenericDocumentOperationResult> writeData(Collection<JsonNode> data);
+	Collection<GenericDocumentOperationResult> writeBulk(Collection<R> data);
 
 	Data getPaginatedData(String startDomainId, int count);
 

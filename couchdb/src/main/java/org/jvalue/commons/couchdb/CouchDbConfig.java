@@ -6,11 +6,6 @@ import org.jvalue.commons.Credentials;
 import org.jvalue.commons.db.DbConfig;
 
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-
 public final class CouchDbConfig extends DbConfig {
 	@JsonCreator
 	public CouchDbConfig(

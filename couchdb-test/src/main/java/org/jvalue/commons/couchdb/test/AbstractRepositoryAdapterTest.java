@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.db.DbConnectorFactory;
 
+
 import java.util.List;
 
 public abstract class AbstractRepositoryAdapterTest<T> extends AbstractRepositoryTest {

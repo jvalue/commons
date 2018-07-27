@@ -53,7 +53,7 @@ public class BasicAuthenticatorTest {
 
 	@Test
 	public void testMissingCredentials() {
-		testFailure(user, new DocumentNotFoundException(credentials.getUserId()), true);
+		testFailure(user, new DocumentNotFoundException(credentials.getId()), true);
 	}
 
 

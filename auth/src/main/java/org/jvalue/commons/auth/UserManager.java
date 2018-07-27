@@ -3,7 +3,6 @@ package org.jvalue.commons.auth;
 
 import org.ektorp.DocumentNotFoundException;
 import org.jvalue.commons.db.repositories.GenericRepository;
-import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.jvalue.commons.utils.Assert;
 import org.jvalue.commons.utils.Log;
 

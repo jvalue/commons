@@ -60,7 +60,7 @@ public final class BasicCredentialsRepository extends RepositoryAdapter<
 
 		@Override
 		public String getIdForValue(BasicCredentials credentials) {
-			return credentials.getUserId();
+			return credentials.getId();
 		}
 	}
 

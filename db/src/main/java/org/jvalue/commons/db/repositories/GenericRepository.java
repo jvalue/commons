@@ -1,8 +1,10 @@
 package org.jvalue.commons.db.repositories;
 
+import org.jvalue.commons.EntityBase;
+
 import java.util.List;
 
-public interface GenericRepository<V> {
+public interface GenericRepository<V extends EntityBase> {
 	V findById(String Id);
 	void add(V Value);
 	void update(V value);
