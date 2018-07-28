@@ -4,7 +4,6 @@ package org.jvalue.commons.auth;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
-import com.google.gson.annotations.SerializedName;
 import org.jvalue.commons.EntityBase;
 
 import javax.validation.constraints.NotNull;
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotNull;
  */
 public final class User implements EntityBase {
 
-	@SerializedName("_id")
 	@NotNull private final String id;
 	@NotNull private final String name;
 	@NotNull private final String email;

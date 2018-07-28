@@ -16,7 +16,7 @@ public class CouchDbUserRepositoryFactory implements UserRepositoryFactory {
 	}
 
 	@Override
-	public GenericRepository<User> createUserRepository() {
+	public GenericUserRepository<User> createUserRepository() {
 		return new UserRepository(dbConnectorFactory);
 	}
 }
