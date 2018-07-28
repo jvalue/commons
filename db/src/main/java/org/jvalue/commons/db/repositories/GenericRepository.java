@@ -1,5 +1,6 @@
 package org.jvalue.commons.db.repositories;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.jvalue.commons.EntityBase;
 
 import java.util.List;

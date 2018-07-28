@@ -4,6 +4,7 @@ package org.jvalue.commons.auth;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
+import com.google.gson.annotations.SerializedName;
 import org.jvalue.commons.EntityBase;
 
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 public final class BasicCredentials implements EntityBase {
 
+	@SerializedName("_id")
 	@NotNull private final String userId;
 	@NotNull private final byte[] encryptedPassword;
 	@NotNull private final byte[] salt;
