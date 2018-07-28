@@ -1,5 +1,6 @@
 dependencies {
 	compile 'javax.validation:validation-api:2.0.0.Final'
+	compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.8.0'
 	compile project(':models')
 	compile project(':rest')
 
