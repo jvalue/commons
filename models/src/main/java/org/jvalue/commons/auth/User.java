@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 /**
  * A registered user.
  */
-public final class User {
+public class User {
 
 	@NotNull private final String id;
 	@NotNull private final String name;
