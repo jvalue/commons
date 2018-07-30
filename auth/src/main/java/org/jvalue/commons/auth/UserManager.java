@@ -2,6 +2,8 @@ package org.jvalue.commons.auth;
 
 
 import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.db.factories.AuthRepositoryFactory;
+import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.jvalue.commons.db.repositories.GenericRepository;
 import org.jvalue.commons.utils.Assert;
 import org.jvalue.commons.utils.Log;
@@ -26,12 +28,11 @@ public final class UserManager {
 
 	@Inject
 	UserManager(
-			UserRepositoryFactory userRepositoryFactory,
-			BasicCredentialsRepositoryFactory basicCredentialsRepositoryFactory,
+			AuthRepositoryFactory authRepositoryFactory,
 			BasicAuthUtils authenticationUtils) {
 
-		this.userRepository = userRepositoryFactory.createUserRepository();
-		this.credentialsRepository = basicCredentialsRepositoryFactory.createBasicCredentialRepository();
+		this.userRepository = authRepositoryFactory.createUserRepository();
+		this.credentialsRepository = authRepositoryFactory.createBasicCredentialRepository();
 		this.authenticationUtils = authenticationUtils;
 	}
 

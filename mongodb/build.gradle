@@ -1,10 +1,11 @@
 dependencies {
-	compile 'javax.validation:validation-api:2.0.0.Final'
-	compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.8.0'
-	compile project(':models')
-	compile project(':rest')
-	compile project(':db')
+    compile 'javax.validation:validation-api:2.0.0.Final'
+    compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.8.0'
+    compile project(':models')
+    compile project(':rest')
+    compile project(':db')
+    compile project(':utils')
 
-	testCompile 'junit:junit:4.12'
-	testCompile 'org.jmockit:jmockit:1.13'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.jmockit:jmockit:1.13'
 }
