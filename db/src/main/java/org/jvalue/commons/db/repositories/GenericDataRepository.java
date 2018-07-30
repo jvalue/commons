@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public interface GenericDataRepository<V extends EntityBase, R> {
+public interface GenericDataRepository<V,R> {
 	R findByDomainId(String domainId);
 
 	List<JsonNode> executeQuery(V view, String param);

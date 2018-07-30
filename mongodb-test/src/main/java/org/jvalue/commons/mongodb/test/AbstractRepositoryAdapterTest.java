@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.jvalue.commons.EntityBase;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.repositories.GenericRepository;
-import org.value.commons.mongodb.MongoDocumentNotFoundException;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public abstract class AbstractRepositoryAdapterTest<T extends EntityBase> extend
 	}
 
 
-	@Test(expected = MongoDocumentNotFoundException.class)
+	@Test(expected = GenericDocumentNotFoundException.class)
 	public void testInvalidId() {
 		repository.findById("missingId");
 	}
@@ -49,7 +49,7 @@ public abstract class AbstractRepositoryAdapterTest<T extends EntityBase> extend
 	}
 
 
-	@Test(expected = MongoDocumentNotFoundException.class)
+	@Test(expected = GenericDocumentNotFoundException.class)
 	public void testRemove() {
 		repository.add(doCreateValue("id1", ""));
 		repository.remove(repository.findById("id1"));

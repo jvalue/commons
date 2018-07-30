@@ -5,14 +5,14 @@ import org.jvalue.commons.auth.User;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.value.commons.mongodb.AbstractMongoDbRepository;
-import org.value.commons.mongodb.MongoDocumentNotFoundException;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDbUserRepository extends AbstractMongoDbRepository<User> implements GenericUserRepository<User> {
 
-	static final String DATABASE_NAME = "dataSources";
-	private static final String COLLECTION_NAME = "dataSourceCollection";
+	static final String DATABASE_NAME = "users";
+	static final String COLLECTION_NAME = "authCollection";
 
 
 	public MongoDbUserRepository(DbConnectorFactory connectorFactory) {
@@ -22,9 +22,9 @@ public class MongoDbUserRepository extends AbstractMongoDbRepository<User> imple
 
 	private Document doFindByEmail(String email) {
 		//should only return one
-		Document document = collection.find(eq("email", email)).first();
+		Document document = database.getCollection(collectionName).find(eq("value.email", email)).first();
 		if (document == null) {
-			throw new MongoDocumentNotFoundException();
+			throw new GenericDocumentNotFoundException();
 		}
 		return document;
 	}

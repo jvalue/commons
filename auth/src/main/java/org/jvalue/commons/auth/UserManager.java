@@ -1,12 +1,12 @@
 package org.jvalue.commons.auth;
 
 
-import org.ektorp.DocumentNotFoundException;
 import org.jvalue.commons.db.factories.AuthRepositoryFactory;
 import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.jvalue.commons.db.repositories.GenericRepository;
 import org.jvalue.commons.utils.Assert;
 import org.jvalue.commons.utils.Log;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -56,7 +56,7 @@ public final class UserManager {
 		try {
 			findByEmail(userEmail);
 			return true;
-		} catch (DocumentNotFoundException dnfe) {
+		} catch (GenericDocumentNotFoundException dnfe) {
 			return false;
 		}
 	}
@@ -106,7 +106,7 @@ public final class UserManager {
 		try {
 			BasicCredentials credentials = credentialsRepository.findById(user.getId());
 			credentialsRepository.remove(credentials);
-		} catch (DocumentNotFoundException dnfe) {
+		} catch (GenericDocumentNotFoundException dnfe) {
 			// user wasn't using basic auth
 		}
 	}

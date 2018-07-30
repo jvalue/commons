@@ -31,6 +31,8 @@ public final class BasicCredentials implements EntityBase {
 		this.salt = salt;
 	}
 
+	@JsonProperty("userId")
+	@Override
 	public String getId() {
 		return userId;
 	}

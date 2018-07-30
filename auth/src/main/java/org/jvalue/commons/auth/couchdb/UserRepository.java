@@ -13,6 +13,7 @@ import org.jvalue.commons.couchdb.DbDocument;
 import org.jvalue.commons.couchdb.DbDocumentAdaptable;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.db.DbConnectorFactory;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 import org.jvalue.commons.db.repositories.GenericUserRepository;
 
 import java.util.List;
@@ -32,7 +33,11 @@ public final class UserRepository extends RepositoryAdapter<
 
 	@Override
 	public User findByEmail(String email) {
-		return repository.findByEmail(email).getValue();
+		try{
+			return repository.findByEmail(email).getValue();
+		}catch (DocumentNotFoundException e){
+			throw new GenericDocumentNotFoundException(e);
+		}
 	}
 
 
