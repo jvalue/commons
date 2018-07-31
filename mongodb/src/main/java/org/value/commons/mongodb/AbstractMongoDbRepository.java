@@ -74,9 +74,10 @@ public abstract class AbstractMongoDbRepository<T extends EntityBase> implements
 		try {
 			objectAsJsonString = mapper.writeValueAsString(Value);
 			Document parse = Document.parse(objectAsJsonString);
-			Document newDoc = new Document();
-			newDoc.append("value", parse);
-			database.getCollection(collectionName).insertOne(newDoc);
+			Document objectWrapper = new Document();
+			objectWrapper.append("value", parse);
+
+			database.getCollection(collectionName).insertOne(objectWrapper);
 		} catch (Exception e) {
 			Log.info(e.getMessage());
 		}
@@ -89,8 +90,15 @@ public abstract class AbstractMongoDbRepository<T extends EntityBase> implements
 
 		try {
 			objectAsJsonString = mapper.writeValueAsString(value);
-			Document parse = Document.parse(objectAsJsonString);
-			database.getCollection(collectionName).replaceOne(Filters.eq("value.id", value.getId()), parse);
+
+			Document updated = Document.parse(objectAsJsonString);
+			Document objectWrapper = new Document();
+			objectWrapper.append("value", updated);
+
+			Document searchObject = new Document();
+			searchObject.put("value.id", value.getId());
+
+			database.getCollection(collectionName).replaceOne(searchObject, objectWrapper);
 		} catch (Exception e) {
 			Log.info(e.getMessage());
 		}
