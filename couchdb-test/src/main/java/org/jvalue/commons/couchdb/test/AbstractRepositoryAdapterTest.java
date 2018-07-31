@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.db.DbConnectorFactory;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 
 
 import java.util.List;
@@ -33,7 +34,7 @@ public abstract class AbstractRepositoryAdapterTest<T> extends AbstractRepositor
 	}
 
 
-	@Test(expected = DocumentNotFoundException.class)
+	@Test(expected = GenericDocumentNotFoundException.class)
 	public void testInvalidId() {
 		repository.findById("missingId");
 	}
