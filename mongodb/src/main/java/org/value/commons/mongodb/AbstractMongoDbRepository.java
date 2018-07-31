@@ -25,7 +25,7 @@ public abstract class AbstractMongoDbRepository<T extends EntityBase> implements
 
 	protected String collectionName;
 	protected MongoDatabase database;
-	private static final ObjectMapper mapper = new ObjectMapper();
+	protected static final ObjectMapper mapper = new ObjectMapper();
 	private Class<T> type;
 
 	protected AbstractMongoDbRepository(DbConnectorFactory connectorFactory, String databaseName, String collectionName, Class<T> type) {
