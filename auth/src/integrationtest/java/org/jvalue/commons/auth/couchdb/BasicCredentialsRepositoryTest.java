@@ -1,6 +1,7 @@
-package org.jvalue.commons.auth;
+package org.jvalue.commons.auth.couchdb;
 
 
+import org.jvalue.commons.auth.BasicCredentials;
 import org.jvalue.commons.auth.couchdb.BasicCredentialsRepository;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.couchdb.test.AbstractRepositoryAdapterTest;

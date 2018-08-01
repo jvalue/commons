@@ -5,31 +5,64 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.jvalue.commons.auth.BasicCredentials;
 import org.jvalue.commons.db.DbConnectorFactory;
-import org.jvalue.commons.db.GenericDocumentNotFoundException;
+import org.jvalue.commons.db.repositories.GenericRepository;
 import org.value.commons.mongodb.AbstractMongoDbRepository;
+import org.value.commons.mongodb.MongoDbDocument;
+import org.value.commons.mongodb.MongoDbDocumentAdaptable;
+import org.value.commons.mongodb.MongoDbRepositoryAdapter;
 
-import static com.mongodb.client.model.Filters.eq;
+import javax.print.Doc;
 
-public class MongoDbBasicCredentialsRepository extends AbstractMongoDbRepository<BasicCredentials> {
+public class MongoDbBasicCredentialsRepository extends MongoDbRepositoryAdapter
+	<MongoDbBasicCredentialsRepository.MongoDbBasicCredentialsRepositoryImpl,
+		MongoDbBasicCredentialsRepository.MongoDbBasicCredentialsDocument,
+		BasicCredentials> implements GenericRepository<BasicCredentials> {
 
 	public MongoDbBasicCredentialsRepository(DbConnectorFactory connectorFactory) {
-		super(connectorFactory, MongoDbUserRepository.DATABASE_NAME, MongoDbUserRepository.COLLECTION_NAME, BasicCredentials.class);
+		super(new MongoDbBasicCredentialsRepositoryImpl(connectorFactory, MongoDbUserRepository.DATABASE_NAME, MongoDbUserRepository.COLLECTION_NAME));
 	}
 
-	@Override
-	public BasicCredentials findById(String Id) {
-		//should only return one
-		Document document = findCredentialDocumentById(Id);
-		return deserializeDocument(document);
-	}
 
-	private Document findCredentialDocumentById(String Id){
-		//search for credentials object with user Id
-		Bson filter = Filters.and(Filters.eq("value.userId", Id), Filters.exists("value.encryptedPassword"));
-		Document document = database.getCollection(collectionName).find(filter).first();
-		if (document == null) {
-			throw new GenericDocumentNotFoundException();
+	static class MongoDbBasicCredentialsRepositoryImpl extends AbstractMongoDbRepository<MongoDbBasicCredentialsDocument> implements MongoDbDocumentAdaptable<MongoDbBasicCredentialsDocument, BasicCredentials> {
+
+		protected MongoDbBasicCredentialsRepositoryImpl(DbConnectorFactory connectorFactory, String databaseName, String collectionName) {
+			super(connectorFactory, databaseName, collectionName, MongoDbBasicCredentialsDocument.class);
 		}
-		return document;
+
+
+		@Override
+		protected Bson createIdFilter(String Id) {
+			return Filters.eq("value.userId", Id);
+		}
+
+
+		@Override
+		protected MongoDbBasicCredentialsDocument createNewDocument(Document document) {
+			return new MongoDbBasicCredentialsDocument(document);
+		}
+
+
+		@Override
+		public MongoDbBasicCredentialsDocument createDbDocument(BasicCredentials value) {
+			return new MongoDbBasicCredentialsDocument(value);
+		}
+
+
+		@Override
+		public String getIdForValue(BasicCredentials value) {
+			return value.getId();
+		}
+
+	}
+
+	static class MongoDbBasicCredentialsDocument extends MongoDbDocument<BasicCredentials> {
+		public MongoDbBasicCredentialsDocument(BasicCredentials valueObject) {
+			super(valueObject, BasicCredentials.class);
+		}
+
+
+		public MongoDbBasicCredentialsDocument(Document document) {
+			super(document, BasicCredentials.class);
+		}
 	}
 }

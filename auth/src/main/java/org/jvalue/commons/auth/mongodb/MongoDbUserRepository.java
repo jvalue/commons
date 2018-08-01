@@ -1,39 +1,84 @@
 package org.jvalue.commons.auth.mongodb;
 
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.jvalue.commons.auth.User;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.value.commons.mongodb.AbstractMongoDbRepository;
-import org.jvalue.commons.db.GenericDocumentNotFoundException;
+import org.value.commons.mongodb.MongoDbDocument;
+import org.value.commons.mongodb.MongoDbDocumentAdaptable;
+import org.value.commons.mongodb.MongoDbRepositoryAdapter;
 
-import static com.mongodb.client.model.Filters.eq;
-
-public class MongoDbUserRepository extends AbstractMongoDbRepository<User> implements GenericUserRepository<User> {
+public class MongoDbUserRepository extends MongoDbRepositoryAdapter<
+	MongoDbUserRepository.MongoDbUserRepositoryImpl,
+	MongoDbUserRepository.MongoDbUserDocument,
+	User>
+	implements GenericUserRepository<User> {
 
 	static final String DATABASE_NAME = "users";
 	static final String COLLECTION_NAME = "authCollection";
 
 
 	public MongoDbUserRepository(DbConnectorFactory connectorFactory) {
-		super(connectorFactory, DATABASE_NAME, COLLECTION_NAME, User.class);
-	}
-
-
-	private Document doFindByEmail(String email) {
-		//should only return one
-		Document document = database.getCollection(collectionName).find(eq("value.email", email)).first();
-		if (document == null) {
-			throw new GenericDocumentNotFoundException();
-		}
-		return document;
+		super(new MongoDbUserRepositoryImpl(connectorFactory, DATABASE_NAME, COLLECTION_NAME));
 	}
 
 
 	@Override
 	public User findByEmail(String email) {
-		//should only return one
-		Document document = doFindByEmail(email);
-		return deserializeDocument(document);
+		return repository.findByEmail(email).getValue();
+	}
+
+
+	static class MongoDbUserRepositoryImpl extends AbstractMongoDbRepository<MongoDbUserDocument> implements MongoDbDocumentAdaptable<MongoDbUserDocument, User> {
+
+		protected MongoDbUserRepositoryImpl(DbConnectorFactory connectorFactory, String databaseName, String collectionName) {
+			super(connectorFactory, databaseName, collectionName, MongoDbUserDocument.class);
+		}
+
+
+		@Override
+		public MongoDbUserDocument createDbDocument(User value) {
+			return new MongoDbUserDocument(value);
+		}
+
+
+		@Override
+		public String getIdForValue(User value) {
+			return value.getId();
+		}
+
+
+		public MongoDbUserDocument findByEmail(String email) {
+			return doFindByEmail(email);
+		}
+
+
+		private Bson createByEmailFilter(String email) {
+			return Filters.eq("value.email", email);
+		}
+
+
+		private MongoDbUserDocument doFindByEmail(String email) {
+			return findDocumentByFilter(createByEmailFilter(email));
+		}
+
+
+		@Override
+		protected MongoDbUserDocument createNewDocument(Document document) {
+			return new MongoDbUserDocument(document);
+		}
+	}
+
+	static class MongoDbUserDocument extends MongoDbDocument<User> {
+		public MongoDbUserDocument(User valueObject) {
+			super(valueObject, User.class);
+		}
+		public MongoDbUserDocument(Document document) {
+			super(document, User.class);
+		}
+
 	}
 }

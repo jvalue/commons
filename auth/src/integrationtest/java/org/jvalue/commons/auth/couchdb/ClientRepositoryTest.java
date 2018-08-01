@@ -1,5 +1,7 @@
-package org.jvalue.commons.auth;
+package org.jvalue.commons.auth.couchdb;
 
+import org.jvalue.commons.auth.Role;
+import org.jvalue.commons.auth.User;
 import org.jvalue.commons.auth.couchdb.UserRepository;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.couchdb.test.AbstractRepositoryAdapterTest;
