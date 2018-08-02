@@ -1,24 +1,23 @@
-package org.jvalue.commons.couchdb.test;
+package org.jvalue.commons.mongodb.test;
 
 
-import org.ektorp.DocumentNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.jvalue.commons.couchdb.RepositoryAdapter;
+import org.jvalue.commons.EntityBase;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.GenericDocumentNotFoundException;
-
+import org.jvalue.commons.db.repositories.GenericRepository;
 
 import java.util.List;
 
-public abstract class AbstractRepositoryAdapterTest<T> extends AbstractRepositoryTest {
+public abstract class AbstractRepositoryAdapterTest<T extends EntityBase> extends AbstractRepositoryTest {
 
-	private RepositoryAdapter<?, ?, T> repository;
+	private GenericRepository<T> repository;
 
 
 	@Override
 	protected final void doCreateDatabase(DbConnectorFactory connectorFactory) {
-		this.repository = doCreateAdapter(connectorFactory);
+		this.repository = doCreateRepository(connectorFactory);
 	}
 
 
@@ -50,14 +49,14 @@ public abstract class AbstractRepositoryAdapterTest<T> extends AbstractRepositor
 	}
 
 
-	@Test
+	@Test(expected = GenericDocumentNotFoundException.class)
 	public void testRemove() {
 		repository.add(doCreateValue("id1", ""));
 		repository.remove(repository.findById("id1"));
 		try {
 			repository.findById("id1");
-		} catch(DocumentNotFoundException dnfe) {
-			return;
+		} catch (Exception e) {
+			throw e;
 		}
 		Assert.fail();
 	}
@@ -72,6 +71,7 @@ public abstract class AbstractRepositoryAdapterTest<T> extends AbstractRepositor
 	}
 
 
-	protected abstract RepositoryAdapter<?, ?, T> doCreateAdapter(DbConnectorFactory connectorFactory);
+	protected abstract GenericRepository<T> doCreateRepository(DbConnectorFactory connectorFactory);
+
 	protected abstract T doCreateValue(String id, String data);
 }
