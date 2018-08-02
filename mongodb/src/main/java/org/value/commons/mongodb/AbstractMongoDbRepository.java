@@ -9,7 +9,6 @@ import org.bson.conversions.Bson;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.GenericDocumentNotFoundException;
 import org.jvalue.commons.db.repositories.GenericRepository;
-import org.jvalue.commons.utils.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -38,12 +37,16 @@ public abstract class AbstractMongoDbRepository<D extends MongoDbDocument> imple
 	}
 
 	private D findDocumentById(String Id){
-		return findDocumentByFilter(createIdFilter(Id));
+		return findDocumentByFilter(createIdFilter(Id), Id);
 	}
 
 	protected abstract D createNewDocument(Document document);
 
-	protected D findDocumentByFilter(Bson filter){
+	protected D findDocumentByFilter(Bson filter, String value){
+		long count = database.getCollection(collectionName).countDocuments(filter);
+		if(count > 1) {
+			throw new IllegalStateException("More than 1 documents have the same Id:" + value);
+		}
 		Document document = database.getCollection(collectionName).find(filter).first();
 		if (document == null) {
 			throw new GenericDocumentNotFoundException();
@@ -54,43 +57,35 @@ public abstract class AbstractMongoDbRepository<D extends MongoDbDocument> imple
 		return newDocument;
 	}
 
-//	private V entityFromDocument(Document document) {
-//		V entity = null;
-//		try {
-//			String s = document.toJson();
-//			JsonNode node = mapper.readTree(s);
-//			JsonNode object = node.get("value");
-//			entity = mapper.readValue(object.toString(), entityType);
-//		} catch (IOException e) {
-//			Log.info("Could not deserialize json:" + document.toJson());
-//		}
-//		return entity;
-//	}
-
 	@Override
 	public void add(D Value) {
-		try {
+		addOrUpdate(Value);
+	}
+
+	private void addOrUpdate(D Value){
+		Bson filter = createIdFilter(getValueId(Value));
+		long count = database.getCollection(collectionName).countDocuments(filter);
+		if(count == 0){
+			//add new
 			database.getCollection(collectionName).insertOne(Value);
-		} catch (Exception e) {
-			Log.info(e.getMessage());
+		}else if(count == 1){
+			// already exist -> update
+			database.getCollection(collectionName).replaceOne(filter, Value);
 		}
 	}
 
 	@Override
 	public void update(D value) {
-		try {
-			database.getCollection(collectionName).replaceOne(createIdFilter(value.getId()), value);
-		} catch (Exception e) {
-			Log.info(e.getMessage());
-		}
+		addOrUpdate(value);
 	}
 
 
 	@Override
 	public void remove(D Value) {
-		database.getCollection(collectionName).deleteOne(createIdFilter(Value.getId()));
+		database.getCollection(collectionName).deleteOne(createIdFilter(getValueId(Value)));
 	}
 
+	protected abstract String getValueId(D Value);
 
 	@Override
 	public List<D> getAll() {

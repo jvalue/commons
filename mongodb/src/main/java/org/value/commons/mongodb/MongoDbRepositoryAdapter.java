@@ -12,7 +12,7 @@ import java.util.List;
  * @param <D> type of the wrapper
  * @param <V> type of the wrapper object
  */
-public abstract class MongoDbRepositoryAdapter<T extends AbstractMongoDbRepository<D> & MongoDbDocumentAdaptable<D, V>, D extends MongoDbDocument<V>, V extends EntityBase> {
+public abstract class MongoDbRepositoryAdapter<T extends AbstractMongoDbRepository<D> & MongoDbDocumentAdaptable<D, V>, D extends MongoDbDocument<V>, V> {
 
 	protected final T repository;
 

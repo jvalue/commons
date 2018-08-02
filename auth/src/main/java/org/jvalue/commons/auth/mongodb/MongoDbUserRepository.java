@@ -62,13 +62,19 @@ public class MongoDbUserRepository extends MongoDbRepositoryAdapter<
 
 
 		private MongoDbUserDocument doFindByEmail(String email) {
-			return findDocumentByFilter(createByEmailFilter(email));
+			return findDocumentByFilter(createByEmailFilter(email), email);
 		}
 
 
 		@Override
 		protected MongoDbUserDocument createNewDocument(Document document) {
 			return new MongoDbUserDocument(document);
+		}
+
+
+		@Override
+		protected String getValueId(MongoDbUserDocument Value) {
+			return Value.getValue().getId();
 		}
 	}
 

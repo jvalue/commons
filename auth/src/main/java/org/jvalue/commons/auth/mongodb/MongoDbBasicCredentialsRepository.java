@@ -43,6 +43,12 @@ public class MongoDbBasicCredentialsRepository extends MongoDbRepositoryAdapter
 
 
 		@Override
+		protected String getValueId(MongoDbBasicCredentialsDocument Value) {
+			return Value.getValue().getId();
+		}
+
+
+		@Override
 		public MongoDbBasicCredentialsDocument createDbDocument(BasicCredentials value) {
 			return new MongoDbBasicCredentialsDocument(value);
 		}
