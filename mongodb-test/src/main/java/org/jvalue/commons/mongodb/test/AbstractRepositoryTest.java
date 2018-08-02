@@ -14,6 +14,7 @@ public abstract class AbstractRepositoryTest {
 	private MongoClient mongoDatabase;
 
 	DbConnectorFactory dbConnectorFactory;
+
 	private class MongoDbConnectorFactory extends DbConnectorFactory<MongoClient, MongoDatabase> {
 
 		public MongoDbConnectorFactory(MongoClient mongoClient, String dbPrefix) {
@@ -23,7 +24,7 @@ public abstract class AbstractRepositoryTest {
 
 		@Override
 		public MongoDatabase doCreateConnector(String databaseName, boolean createIfNotExists) {
-				return dbInstance.getDatabase(dbPrefix + "-" + databaseName);
+			return dbInstance.getDatabase(dbPrefix + "-" + databaseName);
 		}
 
 
@@ -49,6 +50,7 @@ public abstract class AbstractRepositoryTest {
 	public final void deleteDatabase() {
 		doDeleteDatabase(dbConnectorFactory);
 	}
+
 
 	protected abstract void doDeleteDatabase(DbConnectorFactory dbConnectorFactory);
 }

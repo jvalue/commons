@@ -9,9 +9,9 @@ public final class MongoDbConfig extends DbConfig {
 
 	@JsonCreator
 	public MongoDbConfig(
-			@JsonProperty("url") String url,
-			@JsonProperty("dbPrefix") String dbPrefix,
-			@JsonProperty("maxConnections") int maxConnections) {
+		@JsonProperty("url") String url,
+		@JsonProperty("dbPrefix") String dbPrefix,
+		@JsonProperty("maxConnections") int maxConnections) {
 		super(url, dbPrefix, null, maxConnections);
 	}
 }

@@ -21,30 +21,36 @@ public abstract class AbstractMongoDbRepository<D extends MongoDbDocument> imple
 	protected MongoDatabase database;
 	protected static final ObjectMapper mapper = new ObjectMapper();
 
+
 	protected AbstractMongoDbRepository(DbConnectorFactory connectorFactory, String databaseName, String collectionName, Class<D> type) {
 		this.database = (MongoDatabase) connectorFactory.createConnector(databaseName, true);
 		this.collectionName = collectionName;
 		this.documentType = type;
 	}
 
-	protected Bson createIdFilter(String Id){
+
+	protected Bson createIdFilter(String Id) {
 		return Filters.eq("value.id", Id);
 	}
+
 
 	@Override
 	public D findById(String Id) {
 		return findDocumentById(Id);
 	}
 
-	private D findDocumentById(String Id){
+
+	private D findDocumentById(String Id) {
 		return findDocumentByFilter(createIdFilter(Id), Id);
 	}
 
+
 	protected abstract D createNewDocument(Document document);
 
-	protected D findDocumentByFilter(Bson filter, String value){
+
+	protected D findDocumentByFilter(Bson filter, String value) {
 		long count = database.getCollection(collectionName).countDocuments(filter);
-		if(count > 1) {
+		if (count > 1) {
 			throw new IllegalStateException("More than 1 documents have the same Id:" + value);
 		}
 		Document document = database.getCollection(collectionName).find(filter).first();
@@ -57,22 +63,25 @@ public abstract class AbstractMongoDbRepository<D extends MongoDbDocument> imple
 		return newDocument;
 	}
 
+
 	@Override
 	public void add(D Value) {
 		addOrUpdate(Value);
 	}
 
-	private void addOrUpdate(D Value){
+
+	private void addOrUpdate(D Value) {
 		Bson filter = createIdFilter(getValueId(Value));
 		long count = database.getCollection(collectionName).countDocuments(filter);
-		if(count == 0){
+		if (count == 0) {
 			//add new
 			database.getCollection(collectionName).insertOne(Value);
-		}else if(count == 1){
+		} else if (count == 1) {
 			// already exist -> update
 			database.getCollection(collectionName).replaceOne(filter, Value);
 		}
 	}
+
 
 	@Override
 	public void update(D value) {
@@ -85,14 +94,16 @@ public abstract class AbstractMongoDbRepository<D extends MongoDbDocument> imple
 		database.getCollection(collectionName).deleteOne(createIdFilter(getValueId(Value)));
 	}
 
+
 	protected abstract String getValueId(D Value);
+
 
 	@Override
 	public List<D> getAll() {
 		FindIterable<Document> documents = database.getCollection(collectionName).find();
 		List<D> list = new LinkedList<>();
 
-		for(Document doc : documents){
+		for (Document doc : documents) {
 			list.add(createNewDocument(doc));
 		}
 

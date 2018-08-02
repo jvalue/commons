@@ -11,12 +11,13 @@ public final class Cursor {
 	private final boolean hasNext;
 	private final int count;
 
+
 	@JsonCreator
 	public Cursor(
 
-			@JsonProperty("next") String next,
-			@JsonProperty("hasNext") boolean hasNext,
-			@JsonProperty("count") int count) {
+		@JsonProperty("next") String next,
+		@JsonProperty("hasNext") boolean hasNext,
+		@JsonProperty("count") int count) {
 
 		this.next = next;
 		this.hasNext = hasNext;
@@ -44,8 +45,8 @@ public final class Cursor {
 		if (other == null || !(other instanceof Cursor)) return false;
 		Cursor cursor = (Cursor) other;
 		return Objects.equal(next, cursor.next)
-				&& Objects.equal(hasNext, cursor.hasNext)
-				&& Objects.equal(count, cursor.count);
+			&& Objects.equal(hasNext, cursor.hasNext)
+			&& Objects.equal(count, cursor.count);
 	}
 
 

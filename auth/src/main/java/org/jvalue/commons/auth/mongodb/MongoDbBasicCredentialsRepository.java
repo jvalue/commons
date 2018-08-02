@@ -11,8 +11,6 @@ import org.value.commons.mongodb.MongoDbDocument;
 import org.value.commons.mongodb.MongoDbDocumentAdaptable;
 import org.value.commons.mongodb.MongoDbRepositoryAdapter;
 
-import javax.print.Doc;
-
 public class MongoDbBasicCredentialsRepository extends MongoDbRepositoryAdapter
 	<MongoDbBasicCredentialsRepository.MongoDbBasicCredentialsRepositoryImpl,
 		MongoDbBasicCredentialsRepository.MongoDbBasicCredentialsDocument,

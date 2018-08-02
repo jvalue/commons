@@ -22,10 +22,12 @@ public class MongoDbDocument<V> extends Document {
 		setValue(value);
 	}
 
-	protected MongoDbDocument(Document document, Class<V> type){
+
+	protected MongoDbDocument(Document document, Class<V> type) {
 		putAll(document);
 		this.type = type;
 	}
+
 
 	public V getValue() {
 		V entity = null;
@@ -47,19 +49,21 @@ public class MongoDbDocument<V> extends Document {
 			String objectAsJsonString = mapper.writeValueAsString(value);
 			Document parse = Document.parse(objectAsJsonString);
 			put("value", parse);
-		}catch (JsonProcessingException e){
+		} catch (JsonProcessingException e) {
 
 		}
 
 		this.value = value;
 	}
 
-	public void setId(String id){
+
+	public void setId(String id) {
 		_id = id;
 		put("_id", id);
 	}
 
-	public String getId(){
+
+	public String getId() {
 		return _id;
 	}
 }

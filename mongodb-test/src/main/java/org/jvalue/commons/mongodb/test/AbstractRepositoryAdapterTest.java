@@ -5,8 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvalue.commons.EntityBase;
 import org.jvalue.commons.db.DbConnectorFactory;
-import org.jvalue.commons.db.repositories.GenericRepository;
 import org.jvalue.commons.db.GenericDocumentNotFoundException;
+import org.jvalue.commons.db.repositories.GenericRepository;
 
 import java.util.List;
 

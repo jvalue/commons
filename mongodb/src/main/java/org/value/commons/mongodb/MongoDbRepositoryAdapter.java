@@ -1,13 +1,12 @@
 package org.value.commons.mongodb;
 
 
-import org.jvalue.commons.EntityBase;
-
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Adapter for converting between wrapper and plain DB objects.
+ *
  * @param <T> type of the repository
  * @param <D> type of the wrapper
  * @param <V> type of the wrapper object
@@ -15,6 +14,7 @@ import java.util.List;
 public abstract class MongoDbRepositoryAdapter<T extends AbstractMongoDbRepository<D> & MongoDbDocumentAdaptable<D, V>, D extends MongoDbDocument<V>, V> {
 
 	protected final T repository;
+
 
 	public MongoDbRepositoryAdapter(T repository) {
 		this.repository = repository;

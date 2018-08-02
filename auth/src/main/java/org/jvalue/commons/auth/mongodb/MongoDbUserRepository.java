@@ -82,6 +82,8 @@ public class MongoDbUserRepository extends MongoDbRepositoryAdapter<
 		public MongoDbUserDocument(User valueObject) {
 			super(valueObject, User.class);
 		}
+
+
 		public MongoDbUserDocument(Document document) {
 			super(document, User.class);
 		}
