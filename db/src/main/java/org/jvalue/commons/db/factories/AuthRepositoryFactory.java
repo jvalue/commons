@@ -6,7 +6,7 @@ import org.jvalue.commons.db.repositories.GenericRepository;
 import org.jvalue.commons.db.repositories.GenericUserRepository;
 
 public interface AuthRepositoryFactory {
-	GenericUserRepository<User> createUserRepository();
+	GenericUserRepository createUserRepository();
 
 	GenericRepository<BasicCredentials> createBasicCredentialRepository();
 }

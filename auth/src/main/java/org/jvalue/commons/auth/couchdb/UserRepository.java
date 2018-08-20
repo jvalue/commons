@@ -21,7 +21,7 @@ import java.util.List;
 public final class UserRepository extends RepositoryAdapter<
 		UserRepository.UserCouchDbRepository,
 		UserRepository.UserDocument,
-		User> implements GenericUserRepository<User> {
+		User> implements GenericUserRepository {
 
 	public static final String DATABASE_NAME = "users";
 	private static final String DOCUMENT_ID = "doc.value.id != null && doc.value.role != null";

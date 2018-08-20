@@ -1,8 +1,10 @@
 package org.jvalue.commons.mongodb.test;
 
 
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import org.jongo.Jongo;
 import org.junit.After;
 import org.junit.Before;
 import org.jvalue.commons.db.DbConnectorFactory;
@@ -15,7 +17,7 @@ public abstract class AbstractRepositoryTest {
 
 	DbConnectorFactory dbConnectorFactory;
 
-	private class MongoDbConnectorFactory extends DbConnectorFactory<MongoClient, MongoDatabase> {
+	private class MongoDbConnectorFactory extends DbConnectorFactory<MongoClient, Jongo> {
 
 		public MongoDbConnectorFactory(MongoClient mongoClient, String dbPrefix) {
 			super(mongoClient, dbPrefix);
@@ -23,8 +25,9 @@ public abstract class AbstractRepositoryTest {
 
 
 		@Override
-		public MongoDatabase doCreateConnector(String databaseName, boolean createIfNotExists) {
-			return dbInstance.getDatabase(dbPrefix + "-" + databaseName);
+		public Jongo doCreateConnector(String databaseName, boolean createIfNotExists) {
+			DB db = dbInstance.getDB(dbPrefix + "-" + databaseName);
+			return new Jongo(db);
 		}
 
 

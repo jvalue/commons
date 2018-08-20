@@ -48,17 +48,7 @@ public final class UserManager {
 
 
 	public User findByEmail(String userEmail) {
-		return ((GenericUserRepository<User>) userRepository).findByEmail(userEmail);
-	}
-
-
-	public boolean contains(String userEmail) {
-		try {
-			findByEmail(userEmail);
-			return true;
-		} catch (GenericDocumentNotFoundException dnfe) {
-			return false;
-		}
+		return ((GenericUserRepository) userRepository).findByEmail(userEmail);
 	}
 
 
@@ -83,6 +73,16 @@ public final class UserManager {
 
 		Log.info("added user " + user.getId());
 		return user;
+	}
+
+
+	public boolean contains(String userEmail) {
+		try {
+			findByEmail(userEmail);
+			return true;
+		} catch (GenericDocumentNotFoundException dnfe) {
+			return false;
+		}
 	}
 
 
