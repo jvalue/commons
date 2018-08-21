@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
     }
@@ -24,6 +25,7 @@ subprojects {
     // default maven repo
     repositories {
         jcenter()
+        mavenCentral()
     }
 
     // gradle wrapper
