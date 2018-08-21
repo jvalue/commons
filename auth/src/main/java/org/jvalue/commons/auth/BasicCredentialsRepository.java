@@ -1,4 +1,4 @@
-package org.jvalue.commons.auth.couchdb;
+package org.jvalue.commons.auth;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -8,24 +8,25 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.DocumentNotFoundException;
 import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.View;
-import org.jvalue.commons.auth.BasicCredentials;
 import org.jvalue.commons.couchdb.DbDocument;
 import org.jvalue.commons.couchdb.DbDocumentAdaptable;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
-import org.jvalue.commons.db.DbConnectorFactory;
-import org.jvalue.commons.db.repositories.GenericRepository;
 
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public final class BasicCredentialsRepository extends RepositoryAdapter<
 		BasicCredentialsRepository.CredentialsCouchDbRepository,
 		BasicCredentialsRepository.CredentialsDocument,
-	BasicCredentials> implements GenericRepository<BasicCredentials> {
+		BasicCredentials> {
 
 	private static final String DOCUMENT_ID = "doc.value.userId != null && doc.value.salt != null";
 
-	public BasicCredentialsRepository(DbConnectorFactory dbConnectorFactory) {
-		super(new CredentialsCouchDbRepository((CouchDbConnector) dbConnectorFactory.createConnector(UserRepository.DATABASE_NAME, true)));
+	@Inject
+	BasicCredentialsRepository(@Named(UserRepository.DATABASE_NAME) CouchDbConnector connector) {
+		super(new CredentialsCouchDbRepository(connector));
 	}
 
 
@@ -60,7 +61,7 @@ public final class BasicCredentialsRepository extends RepositoryAdapter<
 
 		@Override
 		public String getIdForValue(BasicCredentials credentials) {
-			return credentials.getId();
+			return credentials.getUserId();
 		}
 	}
 

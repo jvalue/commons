@@ -1,5 +1,2 @@
 include ':utils', ':couchdb', ':couchdb-test', ':auth', ':rest', ':models'
-include 'db'
-include 'mongodb'
-include 'mongodb-test'
 

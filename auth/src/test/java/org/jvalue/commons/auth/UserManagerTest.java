@@ -10,28 +10,19 @@ import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
-import org.jvalue.commons.auth.couchdb.BasicCredentialsRepository;
-import org.jvalue.commons.db.factories.AuthRepositoryFactory;
-import org.jvalue.commons.db.repositories.GenericUserRepository;
-import org.jvalue.commons.auth.couchdb.UserRepository;
-import org.jvalue.commons.db.repositories.GenericRepository;
 
 @RunWith(JMockit.class)
 public final class UserManagerTest {
 
-	@Mocked
-	private AuthRepositoryFactory authRepositoryFactory;
-
 	@Mocked private UserRepository userRepository;
 	@Mocked private BasicCredentialsRepository credentialsRepository;
-
 	private final BasicAuthUtils authenticationUtils = new BasicAuthUtils();
 
 	private UserManager userManager;
 
 	@Before
 	public void setupManager() {
-		userManager = new UserManager(authRepositoryFactory, authenticationUtils);
+		userManager = new UserManager(userRepository, credentialsRepository, authenticationUtils);
 	}
 
 

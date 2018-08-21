@@ -12,8 +12,6 @@ import org.junit.runner.RunWith;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
-import org.jvalue.commons.auth.couchdb.BasicCredentialsRepository;
-import org.jvalue.commons.db.factories.AuthRepositoryFactory;
 
 @RunWith(JMockit.class)
 public class BasicAuthenticatorTest {
@@ -24,10 +22,6 @@ public class BasicAuthenticatorTest {
 
 	private BasicAuthenticator authenticator;
 
-	@Mocked
-	private AuthRepositoryFactory authRepositoryFactory;
-
-
 	@Mocked private UserManager userManager;
 	@Mocked private BasicCredentialsRepository credentialsRepository;
 	@Mocked private BasicAuthUtils authenticationUtils;
@@ -35,7 +29,7 @@ public class BasicAuthenticatorTest {
 
 	@Before
 	public void setup() {
-		authenticator = new BasicAuthenticator(userManager, authRepositoryFactory, authenticationUtils);
+		authenticator = new BasicAuthenticator(userManager, credentialsRepository, authenticationUtils);
 	}
 
 
@@ -55,7 +49,7 @@ public class BasicAuthenticatorTest {
 
 	@Test
 	public void testMissingCredentials() {
-		testFailure(user, new DocumentNotFoundException(credentials.getId()), true);
+		testFailure(user, new DocumentNotFoundException(credentials.getUserId()), true);
 	}
 
 
