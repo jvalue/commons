@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 /**
  * A registered user.
  */
-public final class User implements EntityBase {
+public class User implements EntityBase {
 
 	@NotNull private final String id;
 	@NotNull private final String name;
@@ -32,6 +32,7 @@ public final class User implements EntityBase {
 	}
 
 
+  @Override
 	public String getId() {
 		return id;
 	}

@@ -7,7 +7,7 @@ import com.google.common.base.Objects;
 
 import javax.validation.constraints.NotNull;
 
-public final class VersionInfo {
+public class VersionInfo {
 
 	@NotNull private final String version;
 	@NotNull private final String build;
