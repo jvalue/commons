@@ -51,7 +51,7 @@ subprojects {
         testClassesDirs = sourceSets.integrationTest.output.classesDirs
         classpath = sourceSets.integrationTest.runtimeClasspath
     }
-    //check.dependsOn integrationTest
+    check.dependsOn integrationTest
 
     // publishing to nexus
     publishing {
