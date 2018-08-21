@@ -3,14 +3,13 @@ package org.jvalue.commons.mongodb.test;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.jvalue.commons.EntityBase;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.GenericDocumentNotFoundException;
 import org.jvalue.commons.db.repositories.GenericRepository;
 
 import java.util.List;
 
-public abstract class AbstractRepositoryAdapterTest<T extends EntityBase> extends AbstractRepositoryTest {
+public abstract class AbstractRepositoryAdapterTest<T> extends AbstractRepositoryTest {
 
 	private GenericRepository<T> repository;
 
