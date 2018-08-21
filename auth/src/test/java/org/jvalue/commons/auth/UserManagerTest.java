@@ -1,20 +1,17 @@
 package org.jvalue.commons.auth;
 
-import org.ektorp.DocumentNotFoundException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.jvalue.commons.auth.couchdb.BasicCredentialsRepository;
-import org.jvalue.commons.db.factories.AuthRepositoryFactory;
-import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.jvalue.commons.auth.couchdb.UserRepository;
-import org.jvalue.commons.db.repositories.GenericRepository;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
+import org.jvalue.commons.db.factories.AuthRepositoryFactory;
 
 @RunWith(JMockit.class)
 public final class UserManagerTest {
@@ -42,7 +39,7 @@ public final class UserManagerTest {
 
 		new Expectations() {{
 			userRepository.findByEmail(mail1); result = new User("", "", "", Role.ADMIN);
-			userRepository.findByEmail(mail2); result = new DocumentNotFoundException("");
+			userRepository.findByEmail(mail2); result = new GenericDocumentNotFoundException("");
 		}};
 
 		Assert.assertTrue(userManager.contains(mail1));
@@ -54,7 +51,7 @@ public final class UserManagerTest {
 	public void testAdd() throws Exception {
 		final BasicAuthUserDescription description = new BasicAuthUserDescription("someName", "someMail", Role.ADMIN, "somePass42");
 		new Expectations() {{
-			userRepository.findByEmail(description.getEmail()); result = new DocumentNotFoundException("");
+			userRepository.findByEmail(description.getEmail()); result = new GenericDocumentNotFoundException("");
 		}};
 
 		final User user = userManager.add(description);

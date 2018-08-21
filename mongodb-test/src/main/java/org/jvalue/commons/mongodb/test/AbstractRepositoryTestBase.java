@@ -9,7 +9,7 @@ import org.jvalue.commons.db.repositories.GenericRepository;
 
 import java.util.List;
 
-public abstract class AbstractRepositoryAdapterTest<T> extends AbstractRepositoryTest {
+public abstract class AbstractRepositoryTestBase<T> extends AbstractRepositoryTest {
 
 	private GenericRepository<T> repository;
 

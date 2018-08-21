@@ -4,10 +4,10 @@ import org.junit.Ignore;
 import org.jvalue.commons.auth.BasicCredentials;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.repositories.GenericRepository;
-import org.jvalue.commons.mongodb.test.AbstractRepositoryAdapterTest;
+import org.jvalue.commons.mongodb.test.AbstractRepositoryTestBase;
 
 @Ignore
-public class MongoDbBasicCredentialsRepositoryTest extends AbstractRepositoryAdapterTest<BasicCredentials> {
+public class MongoDbBasicCredentialsRepositoryTest extends AbstractRepositoryTestBase<BasicCredentials> {
 	@Override
 	protected GenericRepository<BasicCredentials> doCreateRepository(DbConnectorFactory connectorFactory) {
 		return new MongoDbBasicCredentialsRepository(connectorFactory);

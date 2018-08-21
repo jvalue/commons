@@ -1,18 +1,17 @@
 package org.jvalue.commons.auth;
 
 
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 import org.jvalue.commons.db.factories.AuthRepositoryFactory;
-import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.jvalue.commons.db.repositories.GenericRepository;
+import org.jvalue.commons.db.repositories.GenericUserRepository;
 import org.jvalue.commons.utils.Assert;
 import org.jvalue.commons.utils.Log;
-import org.jvalue.commons.db.GenericDocumentNotFoundException;
-
-import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Manages lifecycle of user objects (registration, modification, deletion).
@@ -20,7 +19,7 @@ import javax.inject.Singleton;
 @Singleton
 public final class UserManager {
 
-	private final GenericRepository<User> userRepository;
+	private final GenericUserRepository userRepository;
 
 	// basic auth
 	private final GenericRepository<BasicCredentials> credentialsRepository;
@@ -48,7 +47,7 @@ public final class UserManager {
 
 
 	public User findByEmail(String userEmail) {
-		return ((GenericUserRepository) userRepository).findByEmail(userEmail);
+		return userRepository.findByEmail(userEmail);
 	}
 
 

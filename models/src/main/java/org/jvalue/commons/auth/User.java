@@ -4,26 +4,30 @@ package org.jvalue.commons.auth;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
-import org.jvalue.commons.EntityBase;
 
 import javax.validation.constraints.NotNull;
 
 /**
  * A registered user.
  */
-public class User implements EntityBase {
+public class User {
 
-	@NotNull private final String id;
-	@NotNull private final String name;
-	@NotNull private final String email;
-	@NotNull private final Role role;
+	@NotNull
+	private final String id;
+	@NotNull
+	private final String name;
+	@NotNull
+	private final String email;
+	@NotNull
+	private final Role role;
+
 
 	@JsonCreator
 	public User(
-			@JsonProperty("id") String id,
-			@JsonProperty("name") String name,
-			@JsonProperty("email") String email,
-			@JsonProperty("role") Role role) {
+		@JsonProperty("id") String id,
+		@JsonProperty("name") String name,
+		@JsonProperty("email") String email,
+		@JsonProperty("role") Role role) {
 
 		this.id = id;
 		this.email = email;
@@ -32,7 +36,6 @@ public class User implements EntityBase {
 	}
 
 
-  @Override
 	public String getId() {
 		return id;
 	}
@@ -58,9 +61,9 @@ public class User implements EntityBase {
 		if (other == null || !(other instanceof User)) return false;
 		User user = (User) other;
 		return Objects.equal(id, user.id)
-				&& Objects.equal(name, user.name)
-				&& Objects.equal(email, user.email)
-				&& Objects.equal(role, user.role);
+			&& Objects.equal(name, user.name)
+			&& Objects.equal(email, user.email)
+			&& Objects.equal(role, user.role);
 	}
 
 
