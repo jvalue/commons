@@ -4,13 +4,14 @@ package org.jvalue.commons.auth;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
+import org.jvalue.commons.EntityBase;
 
 import javax.validation.constraints.NotNull;
 
 /**
  * A registered user.
  */
-public class User {
+public class User implements EntityBase {
 
 	@NotNull private final String id;
 	@NotNull private final String name;
@@ -31,6 +32,7 @@ public class User {
 	}
 
 
+  @Override
 	public String getId() {
 		return id;
 	}

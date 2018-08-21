@@ -1,4 +1,4 @@
-package org.jvalue.commons.auth;
+package org.jvalue.commons.auth.couchdb;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -8,31 +8,36 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.DocumentNotFoundException;
 import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.View;
+import org.jvalue.commons.auth.User;
 import org.jvalue.commons.couchdb.DbDocument;
 import org.jvalue.commons.couchdb.DbDocumentAdaptable;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
+import org.jvalue.commons.db.DbConnectorFactory;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
+import org.jvalue.commons.db.repositories.GenericUserRepository;
 
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 public final class UserRepository extends RepositoryAdapter<
 		UserRepository.UserCouchDbRepository,
 		UserRepository.UserDocument,
-		User> {
+		User> implements GenericUserRepository {
 
 	public static final String DATABASE_NAME = "users";
 	private static final String DOCUMENT_ID = "doc.value.id != null && doc.value.role != null";
 
-	@Inject
-	UserRepository(@Named(DATABASE_NAME) CouchDbConnector connector) {
-		super(new UserCouchDbRepository(connector));
+	public UserRepository(DbConnectorFactory connector) {
+		super(new UserCouchDbRepository((CouchDbConnector) connector.createConnector(DATABASE_NAME,true)));
 	}
 
 
+	@Override
 	public User findByEmail(String email) {
-		return repository.findByEmail(email).getValue();
+		try{
+			return repository.findByEmail(email).getValue();
+		}catch (DocumentNotFoundException e){
+			throw new GenericDocumentNotFoundException(e);
+		}
 	}
 
 

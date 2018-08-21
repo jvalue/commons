@@ -1,9 +1,12 @@
 package org.jvalue.commons.auth;
 
 
-import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.db.factories.AuthRepositoryFactory;
+import org.jvalue.commons.db.repositories.GenericUserRepository;
+import org.jvalue.commons.db.repositories.GenericRepository;
 import org.jvalue.commons.utils.Assert;
 import org.jvalue.commons.utils.Log;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,21 +20,19 @@ import javax.inject.Singleton;
 @Singleton
 public final class UserManager {
 
-	private final UserRepository userRepository;
+	private final GenericRepository<User> userRepository;
 
 	// basic auth
-	private final BasicCredentialsRepository credentialsRepository;
+	private final GenericRepository<BasicCredentials> credentialsRepository;
 	private final BasicAuthUtils authenticationUtils;
-
 
 	@Inject
 	UserManager(
-			UserRepository userRepository,
-			BasicCredentialsRepository credentialsRepository,
+			AuthRepositoryFactory authRepositoryFactory,
 			BasicAuthUtils authenticationUtils) {
 
-		this.userRepository = userRepository;
-		this.credentialsRepository = credentialsRepository;
+		this.userRepository = authRepositoryFactory.createUserRepository();
+		this.credentialsRepository = authRepositoryFactory.createBasicCredentialRepository();
 		this.authenticationUtils = authenticationUtils;
 	}
 
@@ -47,17 +48,7 @@ public final class UserManager {
 
 
 	public User findByEmail(String userEmail) {
-		return userRepository.findByEmail(userEmail);
-	}
-
-
-	public boolean contains(String userEmail) {
-		try {
-			findByEmail(userEmail);
-			return true;
-		} catch (DocumentNotFoundException dnfe) {
-			return false;
-		}
+		return ((GenericUserRepository) userRepository).findByEmail(userEmail);
 	}
 
 
@@ -85,6 +76,16 @@ public final class UserManager {
 	}
 
 
+	public boolean contains(String userEmail) {
+		try {
+			findByEmail(userEmail);
+			return true;
+		} catch (GenericDocumentNotFoundException dnfe) {
+			return false;
+		}
+	}
+
+
 	public User add(OAuthUserDescription userDescription, OAuthUtils.OAuthDetails oAuthDetails) {
 		assertUserNotRegistered(oAuthDetails.getEmail());
 
@@ -105,7 +106,7 @@ public final class UserManager {
 		try {
 			BasicCredentials credentials = credentialsRepository.findById(user.getId());
 			credentialsRepository.remove(credentials);
-		} catch (DocumentNotFoundException dnfe) {
+		} catch (GenericDocumentNotFoundException dnfe) {
 			// user wasn't using basic auth
 		}
 	}

@@ -1,4 +1,4 @@
-package org.jvalue.commons;
+package org.jvalue.commons;import org.jvalue.commons.Credentials;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
