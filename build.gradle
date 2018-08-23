@@ -25,7 +25,6 @@ subprojects {
     // default maven repo
     repositories {
         jcenter()
-        mavenCentral()
     }
 
     // gradle wrapper
