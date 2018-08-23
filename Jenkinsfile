@@ -20,23 +20,9 @@ pipeline {
             }
         }
 
-        stage('Acceptance Stage: Start CouchDB Docker Container') {
+        stage('Acceptance Stage: Start Docker Container') {
             steps {
-                sh "docker/couchdb/couchdb-start.sh"
-                timeout(time: 2, unit: "MINUTES") {
-                    echo "Waiting until couchdb is ready."
-                    waitUntil {
-                        script {
-                            try {
-                                sleep 1
-                                sh 'wget -q http://localhost:5984/ -O /dev/null'
-                                return true
-                            } catch (exception) {
-                                return false
-                            }
-                        }
-                    }
-                }
+                sh "docker-compose -f docker/docker-compose.yml up -d"
             }
         }
 
@@ -56,7 +42,8 @@ pipeline {
 
     post {
         always {
-            sh "docker/couchdb/couchdb-stop.sh"
+            junit '*/build/test-results/**/*.xml'
+            sh "docker-compose -f docker/docker-compose.yml stop"
             deleteDir()
         }
     }
