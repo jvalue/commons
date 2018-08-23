@@ -14,6 +14,9 @@ public final class HttpServiceCheck {
 	public static final int DEFAULT_RETRIES = 50;
 	public static final int DEFAULT_SLEEP_TIME_BETWEEN_RETRIES = 3000;
 
+	public static final String MONGODB_URL = "http://localhost:27017/";
+	public static final String COUCHDB_URL = "http://localhost:5984/";
+
 	/**
 	 * Check if HTTP service is available.
 	 * Default amount of retries are {@value #DEFAULT_RETRIES}.
