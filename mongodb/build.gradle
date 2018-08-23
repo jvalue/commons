@@ -8,5 +8,5 @@ dependencies {
     compile project(':utils')
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.jmockit:jmockit:1.13'
+    testCompile 'org.jmockit:jmockit:1.37'
 }
