@@ -1,7 +1,6 @@
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
     }
     dependencies {
     }
@@ -36,23 +35,6 @@ subprojects {
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked"
     }
-
-	test {
-		// required by jmockit
-		jvmArgs += '-Djdk.attach.allowAttachSelf'
-
-		testLogging {
-			events "passed", "skipped", "failed"
-
-			afterSuite { desc, result ->
-				if (!desc.parent) {
-					println "Tests run: ${result.testCount}, " +
-						"Failures: ${result.failedTestCount}, " +
-						"Skipped: ${result.skippedTestCount}"
-				}
-			}
-		}
-	}
 
     // integration test
     def testSrcDir = file('src/integrationtest/java')
