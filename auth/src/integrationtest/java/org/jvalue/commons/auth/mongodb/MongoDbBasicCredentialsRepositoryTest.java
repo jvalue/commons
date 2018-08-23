@@ -1,14 +1,12 @@
 package org.jvalue.commons.auth.mongodb;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.jvalue.commons.auth.BasicCredentials;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.repositories.GenericRepository;
 import org.jvalue.commons.mongodb.test.AbstractRepositoryTestBase;
 import org.jvalue.commons.utils.HttpServiceCheck;
 
-@Ignore
 public class MongoDbBasicCredentialsRepositoryTest extends AbstractRepositoryTestBase<BasicCredentials> {
 
 	@BeforeClass
