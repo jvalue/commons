@@ -1,6 +1,5 @@
 package org.value.commons.mongodb;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jongo.Jongo;
 import org.jongo.MongoCursor;
 import org.jvalue.commons.db.DbConnectorFactory;
@@ -16,7 +15,6 @@ public abstract class AbstractMongoDbRepository<T> implements GenericRepository<
 	private final Class<T> documentType;
 	protected String collectionName;
 	protected Jongo jongo;
-	protected static final ObjectMapper mapper = new ObjectMapper();
 
 
 	protected AbstractMongoDbRepository(DbConnectorFactory connectorFactory, String databaseName, String collectionName, Class<T> type) {
