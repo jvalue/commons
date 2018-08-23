@@ -8,5 +8,6 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.jmockit:jmockit:1.37'
+	testCompile 'org.slf4j:slf4j-jdk14:1.7.25'
     testCompile project(':couchdb-test')
 }
