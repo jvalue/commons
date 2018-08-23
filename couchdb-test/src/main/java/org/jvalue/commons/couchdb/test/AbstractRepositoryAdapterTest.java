@@ -1,13 +1,11 @@
 package org.jvalue.commons.couchdb.test;
 
 
-import org.ektorp.DocumentNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.GenericDocumentNotFoundException;
-
 
 import java.util.List;
 
@@ -56,7 +54,7 @@ public abstract class AbstractRepositoryAdapterTest<T> extends AbstractRepositor
 		repository.remove(repository.findById("id1"));
 		try {
 			repository.findById("id1");
-		} catch(DocumentNotFoundException dnfe) {
+		} catch(GenericDocumentNotFoundException dnfe) {
 			return;
 		}
 		Assert.fail();

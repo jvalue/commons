@@ -34,7 +34,7 @@ public final class BasicCredentials {
 	}
 
 
-	public String getId() {
+	public String getUserId() {
 		return userId;
 	}
 

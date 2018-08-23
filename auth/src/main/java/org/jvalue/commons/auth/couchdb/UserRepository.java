@@ -3,9 +3,7 @@ package org.jvalue.commons.auth.couchdb;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.ektorp.CouchDbConnector;
-import org.ektorp.DocumentNotFoundException;
 import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.View;
 import org.jvalue.commons.auth.User;
@@ -35,7 +33,7 @@ public final class UserRepository extends RepositoryAdapter<
 	public User findByEmail(String email) {
 		try{
 			return repository.findByEmail(email).getValue();
-		}catch (DocumentNotFoundException e){
+		}catch (GenericDocumentNotFoundException e){
 			throw new GenericDocumentNotFoundException(e);
 		}
 	}
@@ -57,7 +55,7 @@ public final class UserRepository extends RepositoryAdapter<
 		@View(name = "by_id", map = "function(doc) { if (" + DOCUMENT_ID + ") emit(doc.value.id, doc._id)}")
 		public UserDocument findById(String userId) {
 			List<UserDocument> users = queryView("by_id", userId);
-			if (users.isEmpty()) throw new DocumentNotFoundException(userId);
+			if (users.isEmpty()) throw new GenericDocumentNotFoundException(userId);
 			if (users.size() > 1)
 				throw new IllegalStateException("found more than one user for id " + userId);
 			return users.get(0);
@@ -67,7 +65,7 @@ public final class UserRepository extends RepositoryAdapter<
 		@View(name = "by_email", map = "function(doc) { if (" + DOCUMENT_ID + ") emit(doc.value.email, doc._id)}")
 		public UserDocument findByEmail(String userEmail) {
 			List<UserDocument> users = queryView("by_email", userEmail);
-			if (users.isEmpty()) throw new DocumentNotFoundException(userEmail);
+			if (users.isEmpty()) throw new GenericDocumentNotFoundException(userEmail);
 			if (users.size() > 1)
 				throw new IllegalStateException("found more than one user for email " + userEmail);
 			return users.get(0);

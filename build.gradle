@@ -18,7 +18,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'maven'
-//    apply plugin: 'maven-publish'
+    apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.8
 
@@ -55,31 +55,31 @@ subprojects {
     }
     check.dependsOn integrationTest
 
-//    // publishing to nexus
-//    publishing {
-//        if (!project.ext.has('nexusUsername')) {
-//            project.ext.nexusUsername = ''
-//        }
-//        if (!project.ext.has('nexusPassword')) {
-//            project.ext.nexusPassword = ''
-//        }
-//        publications {
-//            nexusJava(MavenPublication) {
-//                from components.java
-//                artifact sourcesJar
-//                artifact javadocJar
-//            }
-//        }
-//        repositories {
-//            maven {
-//                url 'https://mojo-maven.cs.fau.de/repository/public-releases/'
-//                credentials {
-//                    username nexusUsername
-//                    password nexusPassword
-//                }
-//            }
-//        }
-//    }
+    // publishing to nexus
+    publishing {
+        if (!project.ext.has('nexusUsername')) {
+            project.ext.nexusUsername = ''
+        }
+        if (!project.ext.has('nexusPassword')) {
+            project.ext.nexusPassword = ''
+        }
+        publications {
+            nexusJava(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+            }
+        }
+        repositories {
+            maven {
+                url 'https://mojo-maven.cs.fau.de/repository/public-releases/'
+                credentials {
+                    username nexusUsername
+                    password nexusPassword
+                }
+            }
+        }
+    }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'

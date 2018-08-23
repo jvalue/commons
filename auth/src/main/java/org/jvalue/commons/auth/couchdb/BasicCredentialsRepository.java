@@ -3,9 +3,7 @@ package org.jvalue.commons.auth.couchdb;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.ektorp.CouchDbConnector;
-import org.ektorp.DocumentNotFoundException;
 import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.View;
 import org.jvalue.commons.auth.BasicCredentials;
@@ -13,6 +11,7 @@ import org.jvalue.commons.couchdb.DbDocument;
 import org.jvalue.commons.couchdb.DbDocumentAdaptable;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.db.DbConnectorFactory;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 import org.jvalue.commons.db.repositories.GenericRepository;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public final class BasicCredentialsRepository extends RepositoryAdapter<
 		@View(name = "by_id", map = "function(doc) { if (" + DOCUMENT_ID + ") emit(doc.value.userId, doc._id)}")
 		public CredentialsDocument findById(String userId) {
 			List<CredentialsDocument> credentials = queryView("by_id", userId);
-			if (credentials.isEmpty()) throw new DocumentNotFoundException(userId);
+			if (credentials.isEmpty()) throw new GenericDocumentNotFoundException(userId);
 			if (credentials.size() > 1)
 				throw new IllegalStateException("found more than one credentials for id " + userId);
 			return credentials.get(0);
@@ -60,7 +59,7 @@ public final class BasicCredentialsRepository extends RepositoryAdapter<
 
 		@Override
 		public String getIdForValue(BasicCredentials credentials) {
-			return credentials.getId();
+			return credentials.getUserId();
 		}
 	}
 

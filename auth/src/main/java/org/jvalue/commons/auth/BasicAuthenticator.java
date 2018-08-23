@@ -3,14 +3,12 @@ package org.jvalue.commons.auth;
 
 import com.google.common.base.Optional;
 import com.google.common.io.BaseEncoding;
-
-import org.ektorp.DocumentNotFoundException;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
 import org.jvalue.commons.db.factories.AuthRepositoryFactory;
 import org.jvalue.commons.db.repositories.GenericRepository;
 
-import java.nio.charset.StandardCharsets;
-
 import javax.inject.Inject;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Handles basic (username + password) authentication.
@@ -58,7 +56,7 @@ public final class BasicAuthenticator implements Authenticator {
 				return Optional.absent();
 			}
 
-		} catch (DocumentNotFoundException dnfe) {
+		} catch (GenericDocumentNotFoundException dnfe) {
 			return Optional.absent();
 		}
 	}

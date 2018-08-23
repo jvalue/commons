@@ -20,6 +20,6 @@ public class MongoDbBasicCredentialsRepository extends AbstractMongoDbRepository
 
 	@Override
 	protected String getValueId(BasicCredentials Value) {
-		return Value.getId();
+		return Value.getUserId();
 	}
 }
