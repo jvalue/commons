@@ -12,17 +12,22 @@ import javax.validation.constraints.NotNull;
  */
 public class User {
 
-	@NotNull private final String id;
-	@NotNull private final String name;
-	@NotNull private final String email;
-	@NotNull private final Role role;
+	@NotNull
+	private final String id;
+	@NotNull
+	private final String name;
+	@NotNull
+	private final String email;
+	@NotNull
+	private final Role role;
+
 
 	@JsonCreator
 	public User(
-			@JsonProperty("id") String id,
-			@JsonProperty("name") String name,
-			@JsonProperty("email") String email,
-			@JsonProperty("role") Role role) {
+		@JsonProperty("id") String id,
+		@JsonProperty("name") String name,
+		@JsonProperty("email") String email,
+		@JsonProperty("role") Role role) {
 
 		this.id = id;
 		this.email = email;
@@ -56,9 +61,9 @@ public class User {
 		if (other == null || !(other instanceof User)) return false;
 		User user = (User) other;
 		return Objects.equal(id, user.id)
-				&& Objects.equal(name, user.name)
-				&& Objects.equal(email, user.email)
-				&& Objects.equal(role, user.role);
+			&& Objects.equal(name, user.name)
+			&& Objects.equal(email, user.email)
+			&& Objects.equal(role, user.role);
 	}
 
 

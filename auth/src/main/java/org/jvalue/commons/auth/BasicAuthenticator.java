@@ -3,12 +3,12 @@ package org.jvalue.commons.auth;
 
 import com.google.common.base.Optional;
 import com.google.common.io.BaseEncoding;
-
-import org.ektorp.DocumentNotFoundException;
-
-import java.nio.charset.StandardCharsets;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
+import org.jvalue.commons.db.factories.AuthRepositoryFactory;
+import org.jvalue.commons.db.repositories.GenericRepository;
 
 import javax.inject.Inject;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Handles basic (username + password) authentication.
@@ -16,17 +16,17 @@ import javax.inject.Inject;
 public final class BasicAuthenticator implements Authenticator {
 
 	private final UserManager userManager;
-	private final BasicCredentialsRepository credentialsRepository;
+	private final GenericRepository<BasicCredentials> credentialsRepository;
 	private final BasicAuthUtils authenticationUtils;
 
 	@Inject
 	BasicAuthenticator(
 			UserManager userManager,
-			BasicCredentialsRepository credentialsRepository,
+			AuthRepositoryFactory authRepositoryFactory,
 			BasicAuthUtils authenticationUtils) {
 
 		this.userManager = userManager;
-		this.credentialsRepository = credentialsRepository;
+		this.credentialsRepository = authRepositoryFactory.createBasicCredentialRepository();
 		this.authenticationUtils  = authenticationUtils;
 	}
 
@@ -56,7 +56,7 @@ public final class BasicAuthenticator implements Authenticator {
 				return Optional.absent();
 			}
 
-		} catch (DocumentNotFoundException dnfe) {
+		} catch (GenericDocumentNotFoundException dnfe) {
 			return Optional.absent();
 		}
 	}

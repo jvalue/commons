@@ -1,9 +1,10 @@
-package org.jvalue.commons.auth;
+package org.jvalue.commons.auth.couchdb;
 
 import org.junit.BeforeClass;
-import org.jvalue.commons.couchdb.DbConnectorFactory;
+import org.jvalue.commons.auth.BasicCredentials;
 import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.couchdb.test.AbstractRepositoryAdapterTest;
+import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.utils.HttpServiceCheck;
 
 public final class BasicCredentialsRepositoryTest extends AbstractRepositoryAdapterTest<BasicCredentials> {
@@ -15,7 +16,7 @@ public final class BasicCredentialsRepositoryTest extends AbstractRepositoryAdap
 
 	@Override
 	protected RepositoryAdapter<?, ?, BasicCredentials> doCreateAdapter(DbConnectorFactory connectorFactory) {
-		return new BasicCredentialsRepository(connectorFactory.createConnector(getClass().getSimpleName(), true));
+		return new BasicCredentialsRepository(connectorFactory);
 	}
 
 	@Override

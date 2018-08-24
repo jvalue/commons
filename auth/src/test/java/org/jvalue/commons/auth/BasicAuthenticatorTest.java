@@ -2,16 +2,16 @@ package org.jvalue.commons.auth;
 
 
 import com.google.common.base.Optional;
-
-import org.ektorp.DocumentNotFoundException;
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.integration.junit4.JMockit;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import mockit.Expectations;
-import mockit.Mocked;
-import mockit.integration.junit4.JMockit;
+import org.jvalue.commons.auth.couchdb.BasicCredentialsRepository;
+import org.jvalue.commons.db.GenericDocumentNotFoundException;
+import org.jvalue.commons.db.factories.AuthRepositoryFactory;
 
 @RunWith(JMockit.class)
 public class BasicAuthenticatorTest {
@@ -22,6 +22,10 @@ public class BasicAuthenticatorTest {
 
 	private BasicAuthenticator authenticator;
 
+	@Mocked
+	private AuthRepositoryFactory authRepositoryFactory;
+
+
 	@Mocked private UserManager userManager;
 	@Mocked private BasicCredentialsRepository credentialsRepository;
 	@Mocked private BasicAuthUtils authenticationUtils;
@@ -29,7 +33,7 @@ public class BasicAuthenticatorTest {
 
 	@Before
 	public void setup() {
-		authenticator = new BasicAuthenticator(userManager, credentialsRepository, authenticationUtils);
+		authenticator = new BasicAuthenticator(userManager, authRepositoryFactory, authenticationUtils);
 	}
 
 
@@ -43,13 +47,13 @@ public class BasicAuthenticatorTest {
 
 	@Test
 	public void testMissingUser() {
-		testFailure(new DocumentNotFoundException(user.getId()), credentials, true);
+		testFailure(new GenericDocumentNotFoundException(user.getId()), credentials, true);
 	}
 
 
 	@Test
 	public void testMissingCredentials() {
-		testFailure(user, new DocumentNotFoundException(credentials.getUserId()), true);
+		testFailure(user, new GenericDocumentNotFoundException(credentials.getUserId()), true);
 	}
 
 
