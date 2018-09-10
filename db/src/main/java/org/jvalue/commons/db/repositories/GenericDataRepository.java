@@ -1,23 +1,13 @@
 package org.jvalue.commons.db.repositories;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.jvalue.commons.db.GenericDocumentOperationResult;
 import org.jvalue.commons.db.data.Data;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
-public interface GenericDataRepository<V, R> {
+public interface GenericDataRepository<R> {
 	R findByDomainId(String domainId);
-
-	List<JsonNode> executeQuery(V view, String param);
-
-	void addQuery(V view);
-
-	void removeQuery(V view);
-
-	boolean containsQuery(V view);
 
 	Map<String, R> getBulk(Collection<String> ids);
 
