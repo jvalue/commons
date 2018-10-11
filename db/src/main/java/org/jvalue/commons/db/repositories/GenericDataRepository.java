@@ -15,6 +15,8 @@ public interface GenericDataRepository<R> {
 
 	Data getPaginatedData(String startDomainId, int count);
 
+	Data getAllDocumentsByDomainId();
+
 	void removeAll();
 
 	void compact();
