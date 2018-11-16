@@ -1,8 +1,11 @@
-dependencies {
-    compile 'org.slf4j:log4j-over-slf4j:1.7.25'
-    compile 'com.google.guava:guava:23.0'
+buildscript {
+	apply from: '../dependencies.gradle'
+}
 
-    testCompile 'org.jmockit:jmockit:1.37'
-    testCompile 'org.jmockit:jmockit:1.37'
-    testCompile 'junit:junit:4.12'
+dependencies {
+    compile "org.slf4j:log4j-over-slf4j:$slf4jVersion"
+    compile "com.google.guava:guava:$guavaVersion"
+
+	testCompile "org.jmockit:jmockit:$jmockitVersion"
+	testCompile "junit:junit:$junitVersion"
 }

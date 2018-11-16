@@ -1,13 +1,17 @@
+buildscript {
+	apply from: '../dependencies.gradle'
+}
+
 dependencies {
-    compile 'com.google.guava:guava:23.0'
+    compile "com.google.guava:guava:$guavaVersion"
     compile 'javax.inject:javax.inject:1'
-    compile 'com.google.api-client:google-api-client-java6:1.23.0'
-    compile 'com.google.api-client:google-api-client-jackson2:1.23.0'
+    compile "com.google.api-client:google-api-client-java6:$googleApiClientVersion"
+    compile "com.google.api-client:google-api-client-jackson2:$googleApiClientVersion"
     compile project(':utils')
     compile project(':couchdb')
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.jmockit:jmockit:1.37'
-	testCompile 'org.slf4j:slf4j-jdk14:1.7.25'
+	testCompile "org.jmockit:jmockit:$jmockitVersion"
+	testCompile "junit:junit:$junitVersion"
+	testCompile "org.slf4j:slf4j-jdk14:$slf4jVersion"
     testCompile project(':couchdb-test')
 }
