@@ -53,6 +53,14 @@ subprojects {
 		}
 	}
 
+	javadoc {
+		options.addStringOption('encoding', 'UTF-8')
+
+		if (!JavaVersion.current().isJava8()) {
+			options.addBooleanOption('html5', true)
+		}
+	}
+
     // integration test
     def testSrcDir = file('src/integrationtest/java')
     def testResourceDir = file('src/integrationtest/resources')
