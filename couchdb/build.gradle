@@ -1,10 +1,14 @@
+buildscript {
+	apply from: '../dependencies.gradle'
+}
+
 dependencies {
-    compile 'org.ektorp:org.ektorp:1.5.0'
-    compile 'javax.validation:validation-api:2.0.0.Final'
+    compile "org.ektorp:org.ektorp:$ektorpVersion"
+    compile "javax.validation:validation-api:$javaxValidationVersion"
     compile project(':models')
     compile project(':rest')
     compile project(':db')
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.jmockit:jmockit:1.37'
+	testCompile "org.jmockit:jmockit:$jmockitVersion"
+	testCompile "junit:junit:$junitVersion"
 }

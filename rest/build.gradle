@@ -1,9 +1,13 @@
+buildscript {
+	apply from: '../dependencies.gradle'
+}
+
 dependencies {
-    compile 'org.glassfish.jersey.core:jersey-server:2.25.1'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.10'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.10'
+    compile "org.glassfish.jersey.core:jersey-server:$jerseyVersion"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonCoreVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonCoreVersion"
     compile project(':models')
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.jmockit:jmockit:1.37'
+	testCompile "org.jmockit:jmockit:$jmockitVersion"
+	testCompile "junit:junit:$junitVersion"
 }

@@ -9,7 +9,7 @@ buildscript {
 
 allprojects {
     group = 'org.jvalue.commons'
-    version = '0.2.3-MongoDB'
+    version = '0.3.0-MongoDB'
 }
 
 
@@ -28,7 +28,7 @@ subprojects {
 
     // gradle wrapper
     task wrapper(type: Wrapper) {
-        gradleVersion = '4.4'
+        gradleVersion = '4.10.2'
     }
 
     // show java compiler warnings
@@ -52,6 +52,14 @@ subprojects {
             }
         }
     }
+
+	javadoc {
+		options.addStringOption('encoding', 'UTF-8')
+
+		if (!JavaVersion.current().isJava8()) {
+			options.addBooleanOption('html5', true)
+		}
+	}
 
     // integration test
     def testSrcDir = file('src/integrationtest/java')

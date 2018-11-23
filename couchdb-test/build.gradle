@@ -1,5 +1,9 @@
+buildscript {
+	apply from: '../dependencies.gradle'
+}
+
 dependencies {
-    compile 'junit:junit:4.12'
-    compile 'org.jmockit:jmockit:1.37'
+	compile "org.jmockit:jmockit:$jmockitVersion"
+	compile "junit:junit:$junitVersion"
     compile project(':couchdb')
 }
