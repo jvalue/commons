@@ -1,6 +1,11 @@
+buildscript {
+	apply from: '../dependencies.gradle'
+}
+
 dependencies {
-    compile 'javax.validation:validation-api:2.0.0.Final'
+    compile "javax.validation:validation-api:$javaxValidationVersion"
     compile project(':models')
     compile project(':rest')
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+	
+    testCompile "junit:junit:$junitVersion"
 }
