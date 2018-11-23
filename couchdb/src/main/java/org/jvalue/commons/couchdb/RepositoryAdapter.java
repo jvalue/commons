@@ -3,8 +3,8 @@ package org.jvalue.commons.couchdb;
 
 import org.ektorp.support.CouchDbRepositorySupport;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Adapter for converting between wrapper and plain DB objects.
@@ -45,11 +45,9 @@ public abstract class RepositoryAdapter<T extends CouchDbRepositorySupport<D> & 
 
 
 	public List<V> getAll() {
-		List<V> values = new LinkedList<>();
-		for (D document : repository.getAll()) {
-			values.add(document.getValue());
-		}
-		return values;
+		return repository.getAll().stream()
+			.map(d -> d.getValue())
+			.collect(Collectors.toList());
 	}
 
 }

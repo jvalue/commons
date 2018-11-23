@@ -6,8 +6,9 @@ import org.jvalue.commons.db.DbConnectorFactory;
 import org.jvalue.commons.db.GenericDocumentNotFoundException;
 import org.jvalue.commons.db.repositories.GenericRepository;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 public abstract class AbstractMongoDbRepository<T> implements GenericRepository<T> {
@@ -91,12 +92,7 @@ public abstract class AbstractMongoDbRepository<T> implements GenericRepository<
 	@Override
 	public List<T> getAll() {
 		MongoCursor<T> documents = jongo.getCollection(collectionName).find().as(documentType);
-		List<T> list = new LinkedList<>();
-
-		for (T doc : documents) {
-			list.add(doc);
-		}
-
-		return list;
+		return StreamSupport.stream(documents.spliterator(), false)
+			.collect(Collectors.toList());
 	}
 }
