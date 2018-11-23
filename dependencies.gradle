@@ -5,6 +5,8 @@ ext {
 	jacksonCoreVersion = "2.8.10"
 	javaxValidationVersion = "2.0.0.Final"
 	jerseyVersion = "2.25.1"
+	jongoVersion = "1.4.0"
+	mongoJavaVersion = "3.8.0"
 	slf4jVersion  = "1.7.25"
 
 	//testCompile dependencies
