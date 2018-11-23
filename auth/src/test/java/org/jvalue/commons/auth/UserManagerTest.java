@@ -23,6 +23,7 @@ public final class UserManagerTest {
 	@Mocked private BasicCredentialsRepository credentialsRepository;
 
 	private final BasicAuthUtils authenticationUtils = new BasicAuthUtils();
+	private final BasicAuthUserDescription description = new BasicAuthUserDescription("someName", "someMail", Role.ADMIN, "somePass42");
 
 	private UserManager userManager;
 
@@ -33,7 +34,7 @@ public final class UserManagerTest {
 
 
 	@Test
-	public void testContains() throws Exception {
+	public void testContains() {
 		final String mail1 = "someMail1";
 		final String mail2 = "someMail2";
 
@@ -48,8 +49,7 @@ public final class UserManagerTest {
 
 
 	@Test
-	public void testAdd() throws Exception {
-		final BasicAuthUserDescription description = new BasicAuthUserDescription("someName", "someMail", Role.ADMIN, "somePass42");
+	public void testAdd() {
 		new Expectations() {{
 			userRepository.findByEmail(description.getEmail()); result = new GenericDocumentNotFoundException("");
 		}};
@@ -64,6 +64,13 @@ public final class UserManagerTest {
 			userRepository.add(user);
 			credentialsRepository.add((BasicCredentials) any);
 		}};
+	}
+
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testAdd_UserAlreadyRegistered() {
+		userManager.add(description);
+		userManager.add(description);
 	}
 
 }

@@ -57,11 +57,12 @@ public final class UserManager {
 				authenticationUtils.isPartiallySecurePassword(userDescription.getPassword()),
 				"password must have at least 8 characters and contain numbers");
 
-		// store new user
-		String userId = UUID.randomUUID().toString();
-		User user = new User(userId, userDescription.getName(), userDescription.getEmail(), userDescription.getRole());
 
-		// store user
+		User user = new User(
+			createRandomUserId(),
+			userDescription.getName(),
+			userDescription.getEmail(),
+			userDescription.getRole());
 		userRepository.add(user);
 
 		// store credentials
@@ -88,15 +89,20 @@ public final class UserManager {
 	public User add(OAuthUserDescription userDescription, OAuthUtils.OAuthDetails oAuthDetails) {
 		assertUserNotRegistered(oAuthDetails.getEmail());
 
-		// store new user
-		String userId = UUID.randomUUID().toString();
-		User user = new User(userId, oAuthDetails.getGoogleUserId(), oAuthDetails.getEmail(), userDescription.getRole());
-
-		// store user
+		User user = new User(
+			createRandomUserId(),
+			oAuthDetails.getGoogleUserId(),
+			oAuthDetails.getEmail(),
+			userDescription.getRole());
 		userRepository.add(user);
 
 		Log.info("added user " + user.getId());
 		return user;
+	}
+
+
+	private String createRandomUserId() {
+		return UUID.randomUUID().toString();
 	}
 
 
@@ -112,7 +118,11 @@ public final class UserManager {
 
 
 	private void assertUserNotRegistered(String email) {
-		Assert.assertFalse(contains(email), "already registered user with email " + email);
+		if (contains(email)) {
+			String msg = "User with email '"+ email +"' already registered!";
+			Log.error(msg);
+			throw new IllegalArgumentException(msg);
+		}
 	}
 
 }
