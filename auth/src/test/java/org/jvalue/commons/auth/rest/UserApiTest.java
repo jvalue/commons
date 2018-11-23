@@ -6,7 +6,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.jvalue.commons.auth.*;
+import org.jvalue.commons.auth.BasicAuthUserDescription;
+import org.jvalue.commons.auth.BasicAuthUtils;
+import org.jvalue.commons.auth.BasicAuthenticator;
+import org.jvalue.commons.auth.OAuthUtils;
+import org.jvalue.commons.auth.Role;
+import org.jvalue.commons.auth.UnauthorizedException;
+import org.jvalue.commons.auth.User;
+import org.jvalue.commons.auth.UserManager;
 
 import mockit.Expectations;
 import mockit.Mocked;
