@@ -4,7 +4,6 @@ buildscript {
 
 dependencies {
     compile "com.google.guava:guava:$guavaVersion"
-    compile 'javax.inject:javax.inject:1'
     compile "com.google.api-client:google-api-client-java6:$googleApiClientVersion"
     compile "com.google.api-client:google-api-client-jackson2:$googleApiClientVersion"
     compile project(':utils')
