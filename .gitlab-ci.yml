@@ -13,6 +13,8 @@ variables:
     DOCKER_DRIVER: "overlay2"
     IMAGE_TAG: "${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_ID}"
     GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+        ODS_IT_COUCHDB_HOST: docker
+
 
 
 stages:
