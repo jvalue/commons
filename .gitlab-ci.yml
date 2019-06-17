@@ -52,10 +52,10 @@ unit-tests:
 integration-test:
     stage: test
     script:
-		- docker run -d -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=admin --name couchdb couchdb
+        - docker run -d -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=admin --name couchdb couchdb
         - ./gradlew integrationTest
     after_script:
-	    - docker stop couchdb
+        - docker stop couchdb
 
 publish-jars:
     stage: deploy
