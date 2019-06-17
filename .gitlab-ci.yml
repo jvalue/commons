@@ -52,10 +52,10 @@ unit-tests:
 integration-test:
     stage: test
     script:
-        - docker-compose -f docker/docker-compose.yml up -d
+		- docker run -d -p 5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=admin --name couchdb couchdb
         - ./gradlew integrationTest
     after_script:
-        - docker-compose -f docker/docker-compose.yml down
+	    - docker stop couchdb
 
 publish-jars:
     stage: deploy
