@@ -60,8 +60,6 @@ integration-test:
 
 publish-jars:
     stage: deploy
-    dependencies:
-       - build-docker
     when: manual
     script:
        - ls
