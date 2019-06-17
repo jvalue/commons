@@ -52,7 +52,6 @@ unit-tests:
 integration-test:
     stage: test
     script:
-        - docker load -i image/ods-ci.tar 
         - docker-compose -f docker/docker-compose.yml up -d
         - ./gradlew integrationTest
     after_script:
