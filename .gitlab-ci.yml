@@ -64,5 +64,5 @@ publish-jars:
     stage: deploy
     when: manual
     script:
-       - ls
+       - ./gradlew publish
 
