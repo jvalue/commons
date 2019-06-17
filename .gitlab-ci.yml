@@ -1,0 +1,69 @@
+image: $CI_REGISTRY_IMAGE/ci-base
+services:
+    - docker:dind
+
+# For predefined environment variables see: https://docs.gitlab.com/ee/ci/variables/
+variables:
+    # Instruct Testcontainers to use the daemon of DinD.
+    # See further: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+    DOCKER_HOST: "tcp://docker:2375"
+    # Improve performance with overlayfs.
+    # See further: https://docs.docker.com/storage/storagedriver/overlayfs-driver/
+    # See further: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+    DOCKER_DRIVER: "overlay2"
+    IMAGE_TAG: "${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_ID}"
+    GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+
+
+stages:
+  - build
+  - build-docker
+  - test
+  - deploy
+
+before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+cache:
+    paths:
+        - .gradle/wrapper
+        - .gradle/caches
+
+build-ci-image:
+    stage: build
+    image: docker:stable
+    when: manual
+    script:
+        - docker build -t $CI_REGISTRY_IMAGE/ci-base ./docker/ci-base
+        - docker push $CI_REGISTRY_IMAGE/ci-base
+
+build:
+    stage: build
+    script: 
+        - "./gradlew assemble"
+
+unit-tests:
+    stage: test
+    script: "./gradlew test"
+    artifacts:
+        reports:
+            junit: /*/build/test-results/test/**/TEST-*.xml
+
+integration-test:
+    stage: test
+    script:
+        - docker load -i image/ods-ci.tar 
+        - docker-compose -f docker/docker-compose.yml up -d
+        - ./gradlew integrationTest
+    after_script:
+        - docker-compose -f docker/docker-compose.yml down
+
+publish-jars:
+    stage: deploy
+    dependencies:
+       - build-docker
+    when: manual
+    script:
+       - ls
+       # Tag as latest and push
+
