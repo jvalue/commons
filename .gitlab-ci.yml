@@ -65,5 +65,4 @@ publish-jars:
     when: manual
     script:
        - ls
-       # Tag as latest and push
 
