@@ -6,11 +6,16 @@ import org.jvalue.commons.couchdb.RepositoryAdapter;
 import org.jvalue.commons.couchdb.test.AbstractRepositoryAdapterTest;
 import org.jvalue.commons.utils.HttpServiceCheck;
 
+import java.util.Optional;
+
 public final class BasicCredentialsRepositoryTest extends AbstractRepositoryAdapterTest<BasicCredentials> {
+
+	private static final String COUCHDB_HOST = Optional.ofNullable(System.getenv("ODS_IT_COUCHDB_HOST")).orElse("localhost");
 
 	@BeforeClass
 	public static void setup() {
-		HttpServiceCheck.check(HttpServiceCheck.COUCHDB_URL);
+		String couchDbUrl = "http://" + COUCHDB_HOST + ":5984/";
+		HttpServiceCheck.check(couchDbUrl);
 	}
 
 	@Override
