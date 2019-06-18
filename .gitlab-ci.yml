@@ -43,11 +43,11 @@ build-ci-image:
 build:
     stage: build
     script: 
-        - "./gradlew assemble"
+        - ./gradlew assemble
 
 unit-tests:
     stage: test
-    script: "./gradlew test"
+    script: ./gradlew test
     artifacts:
         reports:
             junit: /*/build/test-results/test/**/TEST-*.xml
