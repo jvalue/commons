@@ -1,3 +1,5 @@
+New version (v2) available here: https://www.github.com/jvalue/open-data-service
+
 # commons
 
 This repository contains modules that are being shared between the [Open Data Service](https://github.com/jvalue/open-data-service) (ODS) and the [Complex Event Processing Service](https://github.com/jvalue/cep-service) (CEPS). They are:
